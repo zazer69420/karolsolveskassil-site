@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071629">
+  <meta name="robots" content="noindex">
+  <title>Solution · karolsolveskassil.ca</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    :root {
+      color-scheme: light;
+      --night: #071629;
+      --ink: #102b42;
+      --muted: #63798a;
+      --paper: #e9eff4;
+      --white: #ffffff;
+      --line: #d8e3ea;
+      --cyan: #18b7d6;
+      --blue: #1769e0;
+      --orange: #ff8a3d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 400 1rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    a:focus-visible, button:focus-visible, .pages:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    /* Top bar: back link, solution title, zoom and download. */
+    .viewer-bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      padding: 12px 20px;
+      background: var(--night);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(7, 22, 41, .25);
+    }
+    .back-link {
+      flex: none;
+      color: #d9e6ee;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .back-link:hover { color: #fff; }
+    .back-link span { color: var(--orange); }
+    .doc-title { flex: 1 1 240px; min-width: 0; margin: 0; }
+    .doc-title strong { display: block; font-size: 1.1rem; line-height: 1.25; overflow-wrap: anywhere; }
+    .doc-title span { display: block; color: var(--cyan); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .zoom-group {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #2b4762;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .zoom-group button {
+      min-width: 40px;
+      height: 38px;
+      padding: 0 10px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .zoom-group button:hover:not(:disabled) { background: #12304d; }
+    .zoom-group button:disabled { opacity: .45; cursor: default; }
+    .zoom-group .zoom-level { min-width: 64px; border-left: 1px solid #2b4762; border-right: 1px solid #2b4762; font-variant-numeric: tabular-nums; }
+    .bar-button {
+      display: inline-flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+      font-size: .92rem;
+      letter-spacing: .04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .bar-button:hover { filter: brightness(1.1); }
+
+    /* Pages column. */
+    .pages {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 24px 16px 64px;
+      overflow-x: auto;
+    }
+    .page {
+      position: relative;
+      flex: none;
+      max-width: none;
+      margin: 0 auto; /* Centred when it fits; scrolls sideways when zoomed wider than the screen. */
+      background: var(--white);
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(7, 22, 41, .14);
+    }
+    .page canvas { display: block; width: 100%; height: 100%; border-radius: 4px; }
+    .page-number {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(7, 22, 41, .6);
+      color: #fff;
+      font-size: .75rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .status {
+      max-width: 560px;
+      margin: 48px auto;
+      padding: 22px 24px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--orange);
+      border-radius: 14px;
+      text-align: center;
+    }
+    .status[hidden] { display: none; }
+    .status a { color: var(--blue); font-weight: 700; }
+
+    .back-link .long { color: inherit; }
+    @media (max-width: 640px) {
+      .viewer-bar { padding: 10px 14px; gap: 8px 10px; position: static; }
+      .doc-title { flex-basis: 100%; order: -1; }
+      .back-link .long { display: none; }
+      .controls { margin-left: auto; gap: 6px; }
+      .zoom-group button { min-width: 34px; padding: 0 8px; }
+      .zoom-group .zoom-level { min-width: 54px; }
+      .bar-button { padding: 0 12px; }
+      .pages { padding: 14px 8px 48px; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="viewer-bar">
+    <a class="back-link" id="back-link" href="/"><span aria-hidden="true">←</span> Back<span class="long"> to lessons</span></a>
+    <p class="doc-title"><span id="doc-format">Solution</span><strong id="doc-name">Loading…</strong></p>
+    <div class="controls">
+      <div class="zoom-group" role="group" aria-label="Zoom">
+        <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+        <button type="button" id="zoom-fit" class="zoom-level" aria-label="Fit to width">100%</button>
+        <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      </div>
+      <a class="bar-button" id="download-link" href="#" download hidden>Download</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="status" id="status" role="status">Loading solution…</p>
+    <div class="pages" id="pages" tabindex="0" aria-label="Solution pages"></div>
+  </main>
+
+  <script>
+    // ----- Which solution to show -----
+    const params = new URLSearchParams(location.search);
+    const fileName = (params.get('file') || '').toLowerCase();
+    const fileMatch = fileName.match(/^lesson-([a-z0-9-]+)-(digital|handwritten)$/);
+    const lessonId = fileMatch ? fileMatch[1] : '';
+    const format = fileMatch ? fileMatch[2] : '';
+    const pdfPath = fileMatch ? `/pdfs/${fileName}.pdf` : '';
+    const lessonTitle = (params.get('title') || '').slice(0, 120) || (lessonId ? `Lesson ${lessonId}` : 'Solution');
+    const formatLabel = format === 'handwritten' ? 'Handwritten solution' : format === 'digital' ? 'Clean digital solution' : 'Solution';
+
+    document.getElementById('doc-name').textContent = lessonTitle;
+    document.getElementById('doc-format').textContent = formatLabel;
+    document.title = `${lessonTitle} · ${formatLabel} · karolsolveskassil.ca`;
+    if (lessonId) document.getElementById('back-link').href = `/#${lessonId}`;
+    if (pdfPath) {
+      const download = document.getElementById('download-link');
+      download.href = pdfPath;
+      download.hidden = false;
+    }
+
+    // ----- Tracking: same rules as the main page -----
+    // The lesson page passes its visit ID (v) so reading here continues that visit
+    // instead of counting a second one. It is removed from the address bar straight away.
+    const engagementApi = 'https://events.karolsolveskassil.ca/';
+    const optOutKey = 'siteEngagementOptOut';
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    function trackingOff() {
+      try { return document.cookie.split('; ').includes(`${optOutKey}=1`); }
+      catch { return false; }
+    }
+    const passedVisit = params.get('v');
+    try {
+      if (passedVisit && uuidPattern.test(passedVisit)) {
+        sessionStorage.setItem('siteEngagementVisitId', passedVisit);
+        sessionStorage.setItem('siteEngagementSource', 'direct');
+      }
+    } catch { /* Storage may be blocked; a new visit is used instead. */ }
+    if (params.has('v')) {
+      try {
+        const cleanUrl = new URL(location.href);
+        cleanUrl.searchParams.delete('v');
+        history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+      } catch { /* The viewer still works if the address can't be cleaned. */ }
+    }
+    function visitIdForTab() {
+      let id = sessionStorage.getItem('siteEngagementVisitId');
+      if (!id) {
+        id = crypto.randomUUID();
+        sessionStorage.setItem('siteEngagementVisitId', id);
+      }
+      return id;
+    }
+    function browserIdForVisits() {
+      let id = localStorage.getItem('siteEngagementBrowserId');
+      if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem('siteEngagementBrowserId', id);
+      }
+      return id;
+    }
+    function visitSource() {
+      try {
+        const saved = sessionStorage.getItem('siteEngagementSource');
+        if (saved) return saved;
+      } catch { /* Fall through. */ }
+      let source = 'direct';
+      if (document.referrer) {
+        try {
+          const host = new URL(document.referrer).hostname.toLowerCase().replace(/^www\./, '');
+          if (host && host !== 'karolsolveskassil.ca' && !host.endsWith('.karolsolveskassil.ca')) source = host;
+        } catch { /* Keep "direct". */ }
+      }
+      try { sessionStorage.setItem('siteEngagementSource', source); } catch { /* Resent next time. */ }
+      return source;
+    }
+    function postEvent(path, body, keepalive) {
+      return fetch(new URL(path, engagementApi), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        keepalive,
+        cache: 'no-store'
+      });
+    }
+    async function sendPresence(visible) {
+      if (location.protocol === 'file:') return;
+      try {
+        if (trackingOff()) return;
+        await postEvent('presence', {
+          visitId: visitIdForTab(), browserId: browserIdForVisits(), visible,
+          ...(visible ? { source: visitSource() } : {})
+        }, !visible);
+      } catch { /* Reading still works if analytics fails. */ }
+    }
+    if (document.visibilityState === 'visible') sendPresence(true);
+    setInterval(() => {
+      if (document.visibilityState === 'visible') sendPresence(true);
+    }, 30000);
+    document.addEventListener('visibilitychange', () => sendPresence(document.visibilityState === 'visible'));
+    window.addEventListener('pagehide', () => sendPresence(false));
+
+    // Only the Download button counts as an engagement here; zooming and the back link don't.
+    document.getElementById('download-link').addEventListener('click', () => {
+      if (location.protocol === 'file:' || !pdfPath) return;
+      try {
+        if (trackingOff()) return;
+        postEvent('', { clickId: crypto.randomUUID(), target: `download-pdf:${lessonId}:${format}` }, true).catch(() => {});
+        postEvent('download', { downloadId: crypto.randomUUID(), filePath: pdfPath }, true).catch(() => {});
+      } catch { /* The download still works if tracking is blocked. */ }
+    });
+  </script>
+
+  <script type="module">
+    import * as pdfjs from '/vendor/pdf.min.mjs';
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL('/vendor/pdf.worker.min.mjs', location.href).href;
+
+    const status = document.getElementById('status');
+    const pagesEl = document.getElementById('pages');
+    const zoomOut = document.getElementById('zoom-out');
+    const zoomIn = document.getElementById('zoom-in');
+    const zoomFit = document.getElementById('zoom-fit');
+    const pdfPath = document.getElementById('download-link').hidden ? '' : new URL(document.getElementById('download-link').href).pathname;
+    const ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
+    let zoom = 1;
+    let pdf = null;
+    const pages = []; // { element, number, viewport (scale 1), task, renderedAt }
+
+    function showProblem(message) {
+      status.innerHTML = message;
+      status.hidden = false;
+      pagesEl.hidden = true;
+      zoomOut.disabled = zoomIn.disabled = zoomFit.disabled = true;
+    }
+
+    // Page width at 100%: the space available, up to a comfortable reading width.
+    function fitWidth() {
+      return Math.max(260, Math.min(pagesEl.clientWidth - 32, 900));
+    }
+    function cssWidthFor(page) {
+      return Math.round(fitWidth() * zoom);
+    }
+    function sizePage(page) {
+      const width = cssWidthFor(page);
+      page.element.style.width = `${width}px`;
+      page.element.style.height = `${Math.round(width * page.viewport.height / page.viewport.width)}px`;
+    }
+
+    async function renderPage(page) {
+      const width = cssWidthFor(page);
+      if (page.renderedAt === width) return;
+      page.renderedAt = width;
+      if (page.task) page.task.cancel();
+      try {
+        const pdfPage = await pdf.getPage(page.number);
+        // Sharp on high-density screens, but capped so very large zooms stay fast.
+        const ratio = Math.min(window.devicePixelRatio || 1, 2, 4096 / width);
+        const viewport = pdfPage.getViewport({ scale: width / page.viewport.width * ratio });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+        page.task = pdfPage.render({ canvasContext: canvas.getContext('2d'), canvas, viewport });
+        await page.task.promise;
+        page.task = null;
+        page.element.querySelector('canvas')?.remove();
+        page.element.prepend(canvas);
+      } catch (error) {
+        if (error?.name === 'RenderingCancelledException') return;
+        page.renderedAt = null;
+        page.element.querySelector('.page-number').textContent = `Page ${page.number} could not be shown`;
+      }
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) renderPage(pages[Number(entry.target.dataset.index)]);
+      }
+    }, { rootMargin: '600px 0px' });
+
+    function isNearView(element) {
+      const box = element.getBoundingClientRect();
+      return box.bottom > -600 && box.top < innerHeight + 600;
+    }
+    function applyZoom(newZoom) {
+      // Keep the same spot in the document in view while zooming.
+      const scrollRatio = document.documentElement.scrollHeight
+        ? scrollY / document.documentElement.scrollHeight : 0;
+      zoom = newZoom;
+      zoomFit.textContent = `${Math.round(zoom * 100)}%`;
+      zoomOut.disabled = zoom <= ZOOMS[0];
+      zoomIn.disabled = zoom >= ZOOMS[ZOOMS.length - 1];
+      for (const page of pages) sizePage(page);
+      scrollTo(scrollX, scrollRatio * document.documentElement.scrollHeight);
+      for (const page of pages) if (isNearView(page.element)) renderPage(page);
+    }
+    zoomIn.addEventListener('click', () => {
+      const next = ZOOMS.find(level => level > zoom);
+      if (next) applyZoom(next);
+    });
+    zoomOut.addEventListener('click', () => {
+      const previous = [...ZOOMS].reverse().find(level => level < zoom);
+      if (previous) applyZoom(previous);
+    });
+    zoomFit.addEventListener('click', () => applyZoom(1));
+
+    let resizeTimer;
+    new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { if (pages.length) applyZoom(zoom); }, 150);
+    }).observe(pagesEl);
+
+    async function load() {
+      if (!pdfPath) {
+        showProblem('This link doesn\'t point to a solution. <a href="/">Go to the lessons</a>.');
+        return;
+      }
+      try {
+        pdf = await pdfjs.getDocument(pdfPath).promise;
+      } catch {
+        showProblem(`This solution couldn't be loaded. It may not be published yet. <a href="/">Go back to the lessons</a> or <a href="${pdfPath}">open the PDF file directly</a>.`);
+        return;
+      }
+      const first = await pdf.getPage(1);
+      const baseViewport = first.getViewport({ scale: 1 });
+      for (let number = 1; number <= pdf.numPages; number++) {
+        const element = document.createElement('div');
+        element.className = 'page';
+        element.dataset.index = String(number - 1);
+        element.setAttribute('role', 'img');
+        element.setAttribute('aria-label', `Page ${number} of ${pdf.numPages}`);
+        element.innerHTML = `<span class="page-number" aria-hidden="true">${number} / ${pdf.numPages}</span>`;
+        const viewport = number === 1 ? baseViewport : (await pdf.getPage(number)).getViewport({ scale: 1 });
+        const page = { element, number, viewport, task: null, renderedAt: null };
+        pages.push(page);
+        sizePage(page);
+        pagesEl.append(element);
+        observer.observe(element);
+      }
+      status.hidden = true;
+      zoomOut.disabled = zoom <= ZOOMS[0];
+    }
+    load();
+  </script>
+</body>
+</html>
