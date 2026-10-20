@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071629">
+  <meta name="description" content="Handwritten and digital solutions for Mr. Kassil's Grade 12 University Physics lessons (SPH4U).">
+  <title>karolsolveskassil.ca — SPH4U Solutions</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="karolsolveskassil.ca">
+  <meta property="og:title" content="karolsolveskassil.ca — SPH4U Solutions">
+  <meta property="og:description" content="Handwritten and digital solutions for Mr. Kassil's Grade 12 University Physics lessons (SPH4U).">
+  <meta property="og:url" content="https://karolsolveskassil.ca/">
+  <meta property="og:image" content="https://karolsolveskassil.ca/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="karolsolveskassil.ca — SPH4U Solutions">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      color-scheme: light;
+      --night: #071629;
+      --navy: #0c2842;
+      --ink: #102b42;
+      --muted: #63798a;
+      --paper: #f3f7fa;
+      --white: #ffffff;
+      --line: #d8e3ea;
+      --cyan: #18b7d6;
+      --blue: #1769e0;
+      --orange: #ff8a3d;
+      --yellow: #ffd166;
+      --green: #17865c;
+      --shadow: 0 22px 60px rgba(7, 22, 41, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 400 1rem/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button { font: inherit; }
+    button:focus-visible, a:focus-visible, .content-panel:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      background: var(--night);
+      color: white;
+    }
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1600px;
+      min-height: 112px;
+      margin: auto;
+      padding: 26px 32px;
+      display: grid;
+      grid-template-columns: 375px minmax(0, 1fr) 375px;
+      gap: 24px;
+      align-items: center;
+      text-align: center;
+    }
+    .site-name {
+      grid-column: 2;
+      grid-row: 1;
+      margin: 0;
+      color: #fff;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.055em;
+    }
+    .site-name .dot { color: var(--orange); }
+    .handwritten-notice {
+      grid-column: 1;
+      grid-row: 1;
+      max-width: 375px;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 4.5px solid var(--orange);
+      color: #d9e6ee;
+      font-size: 1.425rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+    .handwritten-notice strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--orange);
+      font-size: 1.275rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .handwritten-notice span { display: block; }
+    .update-note {
+      grid-column: 3;
+      grid-row: 1;
+      max-width: 250px;
+      justify-self: end;
+      margin: 0;
+      color: #d9e6ee;
+      font-size: 1rem;
+      line-height: 1.4;
+      text-align: right;
+    }
+    .update-note strong { display: block; color: var(--cyan); font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+
+    .page-shell { max-width: 1600px; margin: auto; padding: 36px 32px 88px; }
+    .club-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 28px;
+      padding: 16px 24px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--orange);
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(7, 22, 41, .06);
+    }
+    .club-banner h2 {
+      flex: 0 0 auto;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(1rem, 1.5vw, 1.3rem);
+      font-weight: 850;
+      line-height: 1.25;
+      letter-spacing: -.025em;
+    }
+    .classroom-code {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      color: var(--ink);
+    }
+    .classroom-icon { width: 32px; height: 32px; flex: 0 0 32px; }
+    .classroom-code code {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 4px 10px;
+      border: 1px solid #cbe6d9;
+      border-radius: 7px;
+      background: #edf8f1;
+      color: #126443;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      white-space: nowrap;
+    }
+    @media (max-width: 650px) {
+      .club-banner { padding: 14px 16px; margin-bottom: 22px; gap: 18px; }
+      .classroom-code { flex: 1 1 100%; min-width: 0; font-size: .9rem; }
+      .classroom-code span { min-width: 0; }
+      .classroom-code code { margin: 4px 0 0; }
+      .club-banner h2 { flex: 1 1 100%; }
+    }
+
+    .course-line {
+      margin: 0 0 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 11px;
+      color: var(--blue);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .course-line span { color: #92a5b2; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+    .lesson-nav {
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow: auto;
+      padding: 18px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(205, 220, 229, .85);
+      border-radius: 22px;
+      box-shadow: 0 14px 45px rgba(7, 22, 41, .06);
+      backdrop-filter: blur(14px);
+      scrollbar-width: thin;
+    }
+    .nav-heading {
+      margin: 0 5px 13px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .nav-heading span { color: #98a8b3; }
+    .tab-list { display: flex; flex-direction: column; gap: 7px; }
+    .unit-groups { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .unit-group { border-top: 1px solid var(--line); padding-top: 10px; }
+    .unit-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #e6f1f7;
+      color: var(--ink);
+      font-weight: 850;
+      list-style: none;
+      cursor: pointer;
+    }
+    .unit-summary::-webkit-details-marker { display: none; }
+    .unit-summary:hover { background: #dcebf3; }
+    .unit-summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .unit-count { margin-left: auto; color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .unit-chevron { width: 18px; height: 18px; flex: none; }
+    .unit-group[open] .unit-chevron { transform: rotate(180deg); }
+    .unit-group > .tab-list { margin-top: 9px; }
+
+    .lesson-tab {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: transparent;
+      color: #51697b;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .lesson-tab:hover { transform: translateX(3px); background: #edf4f8; }
+    .lesson-tab[aria-selected="true"] {
+      background: var(--white);
+      color: var(--ink);
+      border-color: #cfe0e9;
+      box-shadow: 0 10px 28px rgba(7, 22, 41, .09);
+    }
+    .tab-code {
+      display: grid;
+      place-items: center;
+      min-height: 38px;
+      padding: 4px;
+      border-radius: 10px;
+      background: #e6f1f7;
+      color: var(--blue);
+      font-size: .78rem;
+      font-weight: 900;
+    }
+    .lesson-tab[aria-selected="true"] .tab-code { background: var(--blue); color: white; }
+    .home-code { font-size: 1rem; }
+    .tab-title { min-width: 0; font-size: .91rem; font-weight: 750; line-height: 1.25; }
+    .tab-arrow { color: var(--orange); font-size: 1.05rem; opacity: 0; transform: translateX(-5px); transition: .18s ease; }
+    .lesson-tab[aria-selected="true"] .tab-arrow { opacity: 1; transform: translateX(0); }
+
+    .lesson-content { min-width: 0; }
+    .content-panel[hidden] { display: none; }
+    .content-panel {
+      min-height: 660px;
+      overflow: hidden;
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .home-hero {
+      position: relative;
+      min-height: 660px;
+      overflow: hidden;
+      padding: clamp(30px, 4.5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: #0a1e35;
+      color: white;
+    }
+    .home-copy { position: relative; z-index: 1; }
+    .hero-kicker, .lesson-kicker {
+      margin: 0 0 16px;
+      color: var(--cyan);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .home-copy h1 {
+      max-width: none;
+      margin: 0 0 22px;
+      font-size: clamp(3rem, 7vw, 5.8rem);
+      line-height: .96;
+      letter-spacing: -.065em;
+    }
+    .hero-lead { max-width: none; margin: 0 0 20px; color: #d9e6ee; font-size: clamp(1.1rem, 2vw, 1.34rem); }
+    .hero-punch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 34px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,138,61,.55);
+      border-radius: 999px;
+      background: rgba(255,138,61,.12);
+      color: #ffe2ce;
+      font-weight: 800;
+    }
+    .hero-punch::before { content: "→"; color: var(--orange); }
+    .hero-features { display: flex; flex-wrap: wrap; gap: 11px; }
+    .hero-feature {
+      padding: 9px 13px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      background: rgba(255,255,255,.07);
+      color: #c8d8e3;
+      font-size: .85rem;
+      font-weight: 750;
+    }
+    .textbook-note {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+    .contact-area { padding: 40px; }
+    .contact-card {
+      max-width: 640px;
+      padding: 28px;
+      border: 1px solid #cfe0e9;
+      border-radius: 19px;
+      background: #f3f8ff;
+    }
+    .contact-card p { margin: 0 0 20px; color: #526a7b; }
+    .contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .contact-email {
+      display: inline-block;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      padding: 13px 18px;
+      border-radius: 11px;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .copy-email {
+      padding: 12px 17px;
+      border: 1px solid #aac5d8;
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .copy-email:hover { background: #e7f1f8; }
+    .contact-card .contact-help { margin: 16px 0 0; font-size: .85rem; }
+    .formula-area { padding: 38px 40px 46px; }
+    .formula-actions { margin: 0 0 20px; display:flex; flex-wrap:wrap; gap:12px; }
+    .formula-actions .pdf-link { width: auto; max-width: 100%; }
+    .formula-sheet-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+    }
+    .formula-sheet-image { display: block; width: 100%; min-width: 760px; height: auto; }
+
+    .panel-heading {
+      position: relative;
+      padding: 36px 40px 30px;
+      border-bottom: 1px solid var(--line);
+      background-color: #ffffff;
+    }
+    .lesson-kicker { color: var(--blue); margin-bottom: 10px; }
+    .panel-heading h2 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(2.15rem, 4.5vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+    .panel-subtitle { margin: 14px 0 0; color: var(--muted); }
+
+    .resource-area { padding: 38px 40px 46px; }
+    .resource-intro { margin: 0 0 19px; color: #526a7b; font-size: .96rem; }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+    .resource-card {
+      position: relative;
+      min-height: 240px;
+      overflow: hidden;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #d6e3ea;
+      border-radius: 19px;
+      background: #f7fafc;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .resource-card:hover { transform: translateY(-3px); border-color: #b7ceda; box-shadow: 0 16px 32px rgba(7,22,41,.08); }
+    .resource-card.digital { background: #f3f8ff; }
+    .resource-card.handwritten { background: #fff7ef; }
+    .format-tag {
+      align-self: flex-start;
+      margin-bottom: 28px;
+      padding: 6px 9px;
+      border-radius: 7px;
+      background: #dfeeff;
+      color: #155bb7;
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .handwritten .format-tag { background: #ffe6d3; color: #b74d0b; }
+    .resource-card h3 { margin: 0 0 7px; font-size: 1.35rem; line-height: 1.15; }
+    .resource-card p { margin: 0 0 24px; color: var(--muted); font-size: .9rem; }
+    .resource-card .resource-warning {
+      margin: 0 0 20px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--orange);
+      border-radius: 7px;
+      background: #fff0d8;
+      color: #744014;
+      font-size: .85rem;
+    }
+    .resource-card.is-available {
+      border: 3px solid var(--green);
+      background: var(--white);
+      box-shadow: 0 18px 42px rgba(23, 134, 92, .20);
+    }
+    .resource-card.is-available h3 { font-size: 1.5rem; }
+    .resource-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .availability { color: #8b9aa4; font-size: .78rem; font-weight: 850; }
+    .availability.available {
+      padding: 12px 15px;
+      border-radius: 10px;
+      background: var(--green);
+      color: white;
+      box-shadow: 0 8px 20px rgba(23, 134, 92, .22);
+      font-size: .95rem;
+      font-weight: 950;
+      letter-spacing: .09em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .pdf-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 10px 24px rgba(23, 105, 224, .28);
+      font-size: 1.05rem;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+    }
+    .pdf-link:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 28px rgba(23, 105, 224, .34);
+    }
+    .pdf-link[hidden] { display: none; }
+    .pdf-preview-wrap[hidden] { display: none; }
+    .pdf-preview-wrap {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid #cbdde6;
+      border-radius: 14px;
+      background: #edf4f7;
+    }
+    .preview-label {
+      margin: 0 0 10px;
+      color: var(--ink);
+      font-size: .76rem;
+      font-weight: 950;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .pdf-preview {
+      display: block;
+      width: 100%;
+      height: 440px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #b9ccd7;
+      border-radius: 9px;
+      background: #dce7ec;
+    }
+    .pdf-pages { padding: 10px; }
+    .pdf-page {
+      margin: 0 auto 12px;
+      max-width: 800px;
+      background: white;
+      box-shadow: 0 2px 9px rgba(7,22,41,.12);
+    }
+    .pdf-page canvas { display: block; width: 100%; height: auto; }
+    .preview-status { margin: 0 0 10px; color: var(--muted); font-size: .82rem; }
+    .preview-status[hidden] { display: none; }
+
+    .site-footer {
+      max-width: 1600px;
+      margin: auto;
+      padding: 22px 32px 38px;
+      color: #435a6b;
+      font-size: 1.11rem;
+      font-weight: 750;
+      text-align: center;
+    }
+    .site-footer p { margin: 0; }
+    .site-footer .privacy-note {
+      max-width: 960px;
+      margin: 8px auto 0;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* Accents: logo, header stripe, outlines and underline bars */
+    :root { --violet: #7c5cff; }
+    .site-name { display: flex; align-items: center; justify-content: center; gap: .28em; }
+    .site-logo {
+      flex: none;
+      width: .92em;
+      height: .92em;
+      border-radius: 22%;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, .28), 0 10px 24px rgba(0, 0, 0, .35);
+    }
+
+    .home-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath d='M44 .5H.5V44' fill='none' stroke='white' stroke-opacity='.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-lead {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 1px solid rgba(24, 183, 214, .5);
+      border-radius: 12px;
+      background: rgba(24, 183, 214, .10);
+      color: #e8f4f8;
+      font-weight: 650;
+    }
+
+    .lesson-tab[aria-selected="true"] {
+      border-color: rgba(23, 105, 224, .35);
+      box-shadow: inset 4px 0 0 var(--blue), 0 10px 28px rgba(7, 22, 41, .09);
+    }
+    .contact-card { border-left: 4px solid var(--blue); }
+
+
+    /* Hero graphic beside the headline */
+    .unit-label { margin: 8px 0 0; color: #b9cad6; font-size: .8rem; font-weight: 700; line-height: 1.3; text-align: center; }
+    .hero-units {
+      position: relative;
+      z-index: 1;
+      margin-top: 34px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, .14);
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .unit {
+      padding: 10px 10px 9px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .04);
+    }
+    .unit svg { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; }
+
+    /* Graph-paper background behind the page */
+    body {
+      background-color: var(--paper);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 .5H.5V28' fill='none' stroke='%231769e0' stroke-opacity='.07'/%3E%3C/svg%3E");
+    }
+
+    /* Course line as a pill */
+    .course-line {
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 7px 16px;
+      border: 1px solid #bcd6f5;
+      border-radius: 999px;
+      background: #e9f2fe;
+    }
+
+    /* Coloured icon tiles for Home, Contact and Formula Sheet */
+    #tab-home .tab-code { background: #ffe9d9; color: #c4520f; }
+    #tab-contact .tab-code { background: #ece7ff; color: #5b3fd6; }
+    #tab-formula-sheet .tab-code { background: #dcf3ea; color: #12704c; }
+    #tab-home[aria-selected="true"] .tab-code { background: var(--orange); color: #fff; }
+    #tab-contact[aria-selected="true"] .tab-code { background: var(--violet); color: #fff; }
+    #tab-formula-sheet[aria-selected="true"] .tab-code { background: var(--green); color: #fff; }
+
+
+    /* Icons on the solution cards */
+    .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .card-top .format-tag { margin-bottom: 0; }
+    .card-icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+    }
+    .card-icon svg { width: 24px; height: 24px; }
+    .handwritten .card-icon { background: #ffe6d3; color: #d85e17; }
+    .digital .card-icon { background: #dfeeff; color: var(--blue); }
+
+    /* Envelope icon on the contact card */
+    .contact-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      border-radius: 14px;
+      background: var(--violet);
+      color: #fff;
+    }
+    .contact-icon svg { width: 24px; height: 24px; }
+    .contact-card { border-left-color: var(--violet); }
+
+    .pdf-link { border: 2px solid var(--blue); }
+    .pdf-link.download-link { background: var(--white); color: var(--blue); box-shadow: none; }
+    .pdf-link.download-link:hover { background: #eef4fd; box-shadow: 0 10px 22px rgba(23, 105, 224, .16); }
+
+    @media (max-width: 1440px) {
+      .header-inner { display: flex; flex-direction: column; gap: 12px; padding: 22px 20px; }
+      .site-name { order: -1; }
+      .handwritten-notice { align-self: center; max-width: none; padding-left: 0; border-left: 0; text-align: center; }
+      .update-note { position: static; transform: none; max-width: none; text-align: center; }
+      .update-note strong { display: block; }
+    }
+    @media (max-width: 920px) {
+      .page-shell { padding: 28px 20px 64px; }
+      .course-line { margin-bottom: 18px; }
+      .workspace { display: block; }
+      .lesson-nav { position: static; max-height: none; margin-bottom: 18px; padding: 12px; overflow: visible; }
+      .nav-heading { display: none; }
+      .tab-list { flex-direction: row; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: thin; }
+      .lesson-tab { flex: 0 0 215px; grid-template-columns: 44px minmax(0,1fr); }
+      .tab-arrow { display: none; }
+      .home-hero, .content-panel { min-height: 570px; }
+    }
+    @media (max-width: 650px) {
+      .header-inner { padding: 20px 16px; }
+      .site-name { font-size: clamp(1.8rem, 9vw, 2.8rem); }
+      .page-shell { padding: 23px 14px 46px; }
+      .course-line { font-size: .68rem; gap: 7px; text-align: center; }
+      .home-hero { min-height: 590px; padding: 39px 25px; }
+      .hero-punch { border-radius: 14px; align-items: flex-start; }
+      .panel-heading { padding: 29px 24px 25px; }
+      .resource-area { padding: 25px 22px 34px; }
+      .contact-area { padding: 25px 22px 34px; }
+      .formula-area { padding: 25px 22px 34px; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .resource-card { min-height: 215px; }
+      .pdf-preview { height: 380px; }
+      .content-panel { min-height: 520px; border-radius: 19px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .lesson-tab, .tab-arrow, .resource-card, .pdf-link { transition: none; }
+    }
+    @media (max-width: 1280px) {
+    }
+    @media (max-width: 1100px) {
+      .hero-units { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 650px) {
+      .hero-units { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .unit:last-child { grid-column: 1 / -1; }
+      .unit:last-child svg { max-width: 50%; margin: 0 auto; }
+      .site-name { font-size: clamp(1.4rem, 7.4vw, 2.6rem); }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="handwritten-notice"><strong>New · Unit 2 added / Answer keys are being worked on and posted</strong></p>
+      <p class="site-name"><img class="site-logo" src="favicon.svg" alt="" width="64" height="64"><span>karolsolveskassil<span class="dot">.</span>ca</span></p>
+      <p class="update-note"><strong>Last updated · Oct 20, 2026 at 2:50 PM EDT</strong></p>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="club-banner" aria-labelledby="club-title">
+      <h2 id="club-title">Join The SLSS Engineering Club</h2>
+      <p class="classroom-code">
+        <svg class="classroom-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+            <rect x="2" y="5" width="44" height="38" rx="3" fill="#f6bb16"/>
+            <path d="M6 9h36v30H6z" fill="#0f9d58"/>
+            <circle cx="15" cy="25" r="3" fill="#57bb8a"/>
+            <path d="M9 34v-2c0-2.8 2.7-4.5 6-4.5s6 1.7 6 4.5v2z" fill="#57bb8a"/>
+            <circle cx="33" cy="25" r="3" fill="#57bb8a"/>
+            <path d="M27 34v-2c0-2.8 2.7-4.5 6-4.5s6 1.7 6 4.5v2z" fill="#57bb8a"/>
+            <circle cx="24" cy="21" r="4" fill="#fff"/>
+            <path d="M16 34v-3c0-3.7 3.6-6 8-6s8 2.3 8 6v3z" fill="#fff"/>
+            <path d="M32 37h8v2h-8z" fill="#f1f3f4"/>
+          </svg>
+        <span>Google Classroom code: <code>fjzr2fzz</code></span>
+      </p>
+    </section>
+
+    <p class="course-line">Grade 12 University Physics <span aria-hidden="true">•</span> SPH4U</p>
+
+    <div class="workspace">
+      <nav class="lesson-nav" aria-label="Course navigation">
+        <p class="nav-heading">Course map <span>29 lessons</span></p>
+        <div class="tab-list" id="tab-list" role="tablist" aria-label="Site pages" aria-orientation="vertical">
+          <button class="lesson-tab" type="button" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true" tabindex="0" data-panel="home">
+            <span class="tab-code home-code" aria-hidden="true">⌂</span>
+            <span class="tab-title">Home</span>
+            <span class="tab-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="lesson-tab" type="button" role="tab" id="tab-contact" aria-controls="panel-contact" aria-selected="false" tabindex="-1" data-panel="contact">
+            <span class="tab-code home-code" aria-hidden="true">@</span>
+            <span class="tab-title">Contact</span>
+            <span class="tab-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="lesson-tab" type="button" role="tab" id="tab-formula-sheet" aria-controls="panel-formula-sheet" aria-selected="false" tabindex="-1" data-panel="formula-sheet">
+            <span class="tab-code home-code" aria-hidden="true">ƒ</span>
+            <span class="tab-title">Formula Sheet</span>
+            <span class="tab-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+        <div class="unit-groups" id="unit-groups"></div>
+      </nav>
+
+      <div class="lesson-content" id="lesson-content">
+        <section class="content-panel" id="panel-home" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
+          <div class="home-hero">
+            <div class="home-copy">
+              <h1>Unlike Mr. Kassil's website, this website actually gives you the answers.</h1>
+              <p class="hero-lead">Handwritten and digital solutions for every one of Mr. Kassil's lessons.</p>
+            </div>
+           <div class="hero-units" aria-hidden="true">
+              <div class="unit">
+                <svg id="hero-graph" viewBox="0 0 320 240" focusable="false">
+                <defs>
+                  <marker id="head-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8fa6b8"/></marker>
+                  <marker id="head-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a48bff"/></marker>
+                  <marker id="head-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18b7d6"/></marker>
+                  <marker id="head-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker>
+                </defs>
+                <line x1="24" y1="222" x2="24" y2="22" stroke="#8fa6b8" stroke-width="2" marker-end="url(#head-axis)"/>
+                <line x1="12" y1="210" x2="310" y2="210" stroke="#8fa6b8" stroke-width="2" marker-end="url(#head-axis)"/>
+                <path id="hero-path" d="M24 210 Q 160 -30 296 210" fill="none" stroke="#18b7d6" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+                <g fill="#ff8a3d" fill-opacity=".85">
+                  <circle cx="64.8" cy="148.8" r="4"/>
+                  <circle cx="105.6" cy="109.2" r="4"/>
+                  <circle cx="160" cy="90" r="4"/>
+                  <circle cx="214.4" cy="109.2" r="4"/>
+                  <circle cx="255.2" cy="148.8" r="4"/>
+                </g>
+                <line x1="24" y1="210" x2="58.5" y2="149.1" stroke="#a48bff" stroke-width="3" marker-end="url(#head-violet)"/>
+                <line x1="160" y1="90" x2="210" y2="90" stroke="#18b7d6" stroke-width="3" marker-end="url(#head-cyan)"/>
+                <line x1="228" y1="120" x2="228" y2="166" stroke="#ff8a3d" stroke-width="3" marker-end="url(#head-orange)"/>
+                <circle r="8" fill="#ffd166">
+                  <animateMotion dur="3.4s" repeatCount="indefinite" calcMode="linear"
+                    keyTimes="0;0.082;0.164;0.246;0.328;0.41;0.492;0.574;0.656;0.738;0.82;1"
+                    keyPoints="0;0.1349;0.2492;0.3451;0.4267;0.5;0.5733;0.6549;0.7508;0.8651;1;1">
+                    <mpath href="#hero-path" xlink:href="#hero-path"/>
+                  </animateMotion>
+                </circle>
+              </svg>
+                <p class="unit-label">Kinematics</p>
+              </div>
+              <div class="unit">
+                <svg viewBox="0 0 120 80" focusable="false">
+                  <defs><marker id="u1-18b7d6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18b7d6"/></marker><marker id="u1-ff8a3d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker></defs>
+                  <circle cx="60" cy="40" r="26" fill="none" stroke="#8fa6b8" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="3 5"/>
+                  <circle cx="60" cy="40" r="3" fill="#8fa6b8"/>
+                  <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0 60 40" to="360 60 40" dur="4s" repeatCount="indefinite"/>
+                    <line x1="86" y1="40" x2="86" y2="64" stroke="#18b7d6" stroke-width="2.5" marker-end="url(#u1-18b7d6)"/>
+                    <line x1="86" y1="40" x2="70" y2="40" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#u1-ff8a3d)"/>
+                    <circle cx="86" cy="40" r="5.5" fill="#ffd166"/>
+                  </g>
+                </svg>
+                <p class="unit-label">Dynamics</p>
+              </div>
+              <div class="unit">
+                <svg viewBox="0 0 120 80" focusable="false">
+                  <defs><marker id="u2-e8f4f8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#e8f4f8"/></marker></defs>
+                  <line x1="4" y1="58" x2="116" y2="58" stroke="#8fa6b8" stroke-opacity=".6" stroke-width="1.5"/>
+                  <g>
+                    <animateTransform attributeName="transform" type="translate" values="0 0;30 0;30 0;30 0" keyTimes="0;0.4;0.9;1" dur="3s" repeatCount="indefinite"/>
+                    <rect x="8" y="40" width="22" height="13" rx="3" fill="#ff8a3d"/>
+                    <circle cx="13" cy="55" r="3" fill="#dfe8ef"/><circle cx="25" cy="55" r="3" fill="#dfe8ef"/>
+                    <line x1="11" y1="31" x2="29" y2="31" stroke="#e8f4f8" stroke-width="2.5" marker-end="url(#u2-e8f4f8)">
+                      <animate attributeName="opacity" calcMode="discrete" values="1;0" keyTimes="0;0.4" dur="3s" repeatCount="indefinite"/>
+                    </line>
+                  </g>
+                  <g>
+                    <animateTransform attributeName="transform" type="translate" values="0 0;0 0;30 0;30 0" keyTimes="0;0.4;0.8;1" dur="3s" repeatCount="indefinite"/>
+                    <rect x="60" y="40" width="22" height="13" rx="3" fill="#18b7d6"/>
+                    <circle cx="65" cy="55" r="3" fill="#dfe8ef"/><circle cx="77" cy="55" r="3" fill="#dfe8ef"/>
+                    <line x1="63" y1="31" x2="81" y2="31" stroke="#e8f4f8" stroke-width="2.5" marker-end="url(#u2-e8f4f8)" opacity="0">
+                      <animate attributeName="opacity" calcMode="discrete" values="0;1;0" keyTimes="0;0.4;0.8" dur="3s" repeatCount="indefinite"/>
+                    </line>
+                  </g>
+                </svg>
+                <p class="unit-label">Energy &amp; Momentum</p>
+              </div>
+              <div class="unit">
+                <svg viewBox="0 0 120 80" focusable="false">
+                  <defs><marker id="u3-18b7d6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18b7d6"/></marker></defs>
+                  <g stroke="#18b7d6" stroke-opacity=".6" stroke-width="1.5" marker-end="url(#u3-18b7d6)"><line x1="96.0" y1="40.0" x2="77.0" y2="40.0"/><line x1="85.5" y1="65.5" x2="72.0" y2="52.0"/><line x1="60.0" y1="76.0" x2="60.0" y2="57.0"/><line x1="34.5" y1="65.5" x2="48.0" y2="52.0"/><line x1="24.0" y1="40.0" x2="43.0" y2="40.0"/><line x1="34.5" y1="14.5" x2="48.0" y2="28.0"/><line x1="60.0" y1="4.0" x2="60.0" y2="23.0"/><line x1="85.5" y1="14.5" x2="72.0" y2="28.0"/></g>
+                  <circle cx="60" cy="40" r="9" fill="#ff8a3d"/>
+                  <path id="u3-orbit" d="M88 40A28 28 0 1 1 32 40A28 28 0 1 1 88 40" fill="none" stroke="#8fa6b8" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="3 5"/>
+                  <circle r="4.5" fill="#ffd166"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#u3-orbit" xlink:href="#u3-orbit"/></animateMotion></circle>
+                </svg>
+                <p class="unit-label">Fields</p>
+              </div>
+              <div class="unit">
+                <svg viewBox="0 0 120 80" focusable="false">
+                  <defs><clipPath id="u4-clip"><rect x="6" y="6" width="108" height="68"/></clipPath></defs>
+                  <line x1="6" y1="40" x2="114" y2="40" stroke="#8fa6b8" stroke-opacity=".55" stroke-width="1.5"/>
+                  <g clip-path="url(#u4-clip)">
+                    <path d="M-54 40q10 -36 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0" fill="none" stroke="#18b7d6" stroke-width="3" stroke-linecap="round">
+                      <animateTransform attributeName="transform" type="translate" from="0 0" to="40 0" dur="1.6s" repeatCount="indefinite"/>
+                    </path>
+                  </g>
+                </svg>
+                <p class="unit-label">Waves &amp; Light</p>
+              </div>
+           </div>
+          </div>
+        </section>
+        <section class="content-panel" id="panel-contact" role="tabpanel" aria-labelledby="tab-contact" tabindex="0" hidden>
+          <div class="panel-heading">
+            <p class="lesson-kicker">Get in touch</p>
+            <h2>Questions? Problems? Ideas?</h2>
+            <p class="panel-subtitle">Found a mistake, got stuck, or have a suggestion for the site? Send me an email.</p>
+          </div>
+          <div class="contact-area">
+            <div class="contact-card">
+              <div class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+              <p>Email me at:</p>
+              <div class="contact-actions">
+                <span class="contact-email">anonymous43656@gmail.com</span>
+                <button class="copy-email" type="button" id="copy-email">Copy email</button>
+              </div>
+              <p class="contact-help" id="contact-help" role="status" aria-live="polite">Copy the address and paste it into your email app.</p>
+            </div>
+          </div>
+        </section>
+        <section class="content-panel" id="panel-formula-sheet" role="tabpanel" aria-labelledby="tab-formula-sheet" tabindex="0" hidden>
+          <div class="panel-heading">
+            <p class="lesson-kicker">Quick reference</p>
+            <h2>SPH4U Formula Sheet</h2>
+            <p class="panel-subtitle">The formula sheet, right here whenever you need it.</p>
+          </div>
+          <div class="formula-area">
+            <div class="formula-actions">
+              <a class="pdf-link download-link" href="images/sph4u-formula-sheet.png" download>Download formula sheet</a>
+              <a class="pdf-link" href="images/sph4u-formula-sheet.png" target="_blank" rel="noopener noreferrer">Open full image <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="formula-sheet-scroll" role="region" aria-label="Formula sheet image; scroll sideways to see all columns" tabindex="0">
+              <img class="formula-sheet-image" src="images/sph4u-formula-sheet.png" alt="SPH4U physics formula sheet with equations for kinematics, dynamics, energy, collisions, fields, waves, and relativity" width="1870" height="2420" loading="lazy">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Grade 12 University Physics · SPH4U · karolsolveskassil.ca</p>
+    <p class="privacy-note">This site counts visits, clicks and downloads to see which solutions are used. It doesn't collect your name, email or account details.</p>
+  </footer>
+
+  <script>
+    const lessons = [
+      { id: '1-0', number: '1.0', title: 'Vectors' },
+      { id: '1-1', number: '1.1', title: 'Kinematics Vectors' },
+      { id: '1-2', number: '1.2', title: 'Chase Collision' },
+      { id: '1-3a', number: '1.3a', title: 'Relative Motion' },
+      { id: '1-3b', number: '1.3b', title: 'Relative Motion Day 2' },
+      { id: '1-4', number: '1.4', title: 'Acceleration Due to Gravity' },
+      { id: '1-5a', number: '1.5a', title: 'Projectile Motion' },
+      { id: '1-6', number: '1.6', title: '2D Acceleration' },
+      { id: '1-8-problem-solving', number: '1.8', title: 'Kinematics Problem Solving' },
+      { id: '1-8-review', number: '1.8', title: 'Problem Solving Review' },
+      { id: '1-8b', number: '1.8b', title: 'Review Extended' },
+      { id: '1-9a', number: '1.9a', title: 'Frames of Reference and Relativity' },
+      { id: '1-9b', number: '1.9b', title: 'Length Contraction and Relative Velocities' },
+      {"id": "2-0", "number": "2.0", "title": "Newton's Laws of Motion"},
+      {"id": "2-1", "number": "2.1", "title": "Equilibrium"},
+      {"id": "2-1b", "number": "2.1b", "title": "Force Table"},
+      {"id": "2-2", "number": "2.2", "title": "Inclined Planes"},
+      {"id": "2-3", "number": "2.3", "title": "Friction, Angled Forces and Tension"},
+      {"id": "2-4", "number": "2.4", "title": "Pulleys and Strings"},
+      {"id": "2-5", "number": "2.5", "title": "Complex Systems"},
+      {"id": "2-5b", "number": "2.5b", "title": "Problem Solving"},
+      {"id": "2-6", "number": "2.6", "title": "Apparent Motion"},
+      {"id": "2-7", "number": "2.7", "title": "Circular Motion"},
+      {"id": "2-8", "number": "2.8", "title": "Forces Analysis in Uniform Circular Motion"},
+      {"id": "2-9b", "number": "2.9b", "title": "Problem Solving"},
+      {"id": "2-10", "number": "2.10", "title": "Gravitation and Satellites"},
+      {"id": "2-11", "number": "2.11", "title": "Dark Matter"},
+      {"id": "2-12", "number": "2.12", "title": "Artificial Gravity"},
+      {"id": "2-14", "number": "2.14", "title": "Review Questions from Text"}
+    ];
+
+    const unitGroups = document.querySelector('#unit-groups');
+    const lessonContent = document.querySelector('#lesson-content');
+    const pencilIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></svg>';
+    const screenIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>';
+
+    function resourceCard(lesson, format) {
+      const handwritten = format === 'handwritten';
+      const label = handwritten ? 'Handwritten solution' : 'Clean digital solution';
+      const description = handwritten
+        ? 'Handwritten solutions, test-style answers'
+        : 'A cleaner, explanatory, and verified version';
+      const file = `pdfs/lesson-${lesson.id}-${format}.pdf`;
+      // View PDF opens the site's own viewer, so reading time counts as minutes viewed.
+      const viewerHref = `view/?file=lesson-${lesson.id}-${format}&title=${encodeURIComponent(`${lesson.number} ${lesson.title}`)}`;
+
+      return `
+        <article class="resource-card ${format}" data-pdf="${file}">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">${handwritten ? pencilIcon : screenIcon}</span>
+            <span class="format-tag">${handwritten ? 'Original working' : 'Polished version'}</span>
+          </div>
+          <h3>${label}</h3>
+          <p>${description}</p>
+          ${handwritten && lesson.id === '1-2' ? '<p class="resource-warning">Some practice questions may be missing from the handwritten solutions. You can find them in the digital copy.</p>' : ''}
+          ${handwritten && lesson.id === '1-3b' ? '<p class="resource-warning">Not all practice problems are included in the handwritten solution. You can find the remaining problems in the digital copy.</p>' : ''}
+          <div class="resource-bottom">
+            <span class="availability">Coming soon</span>
+            <a class="pdf-link view-link" href="${viewerHref}" target="_blank" rel="noopener" hidden>View PDF <span aria-hidden="true">↗</span></a>
+            <a class="pdf-link download-link" href="${file}" download hidden>Download PDF</a>
+          </div>
+          <div class="pdf-preview-wrap" hidden>
+            <p class="preview-label">Scrollable PDF preview</p>
+            <p class="preview-status" role="status">Loading preview…</p>
+            <div class="pdf-preview" role="region" aria-label="${label} preview" tabindex="0">
+              <div class="pdf-pages"></div>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // Each unit gets one collapsible group; future units use the same layout.
+    const unitNumbers = [...new Set(lessons.map(lesson => lesson.id.split('-')[0]))];
+    for (const unit of unitNumbers) {
+      const count = lessons.filter(lesson => lesson.id.split('-')[0] === unit).length;
+      unitGroups.insertAdjacentHTML('beforeend', `
+        <details class="unit-group" id="unit-${unit}-menu">
+          <summary class="unit-summary" id="unit-${unit}-toggle">
+            <span>Unit ${unit}</span>
+            <span class="unit-count">${count} lessons</span>
+            <svg class="unit-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="tab-list" id="unit-${unit}-tabs" role="tablist" aria-label="Unit ${unit} lessons" aria-orientation="vertical"></div>
+        </details>`);
+    }
+
+    for (const lesson of lessons) {
+      const unitTabs = document.querySelector(`#unit-${lesson.id.split('-')[0]}-tabs`);
+      unitTabs.insertAdjacentHTML('beforeend', `
+        <button class="lesson-tab" type="button" role="tab" id="tab-${lesson.id}" aria-controls="panel-${lesson.id}" aria-selected="false" tabindex="-1" data-panel="${lesson.id}">
+          <span class="tab-code">${lesson.number}</span>
+          <span class="tab-title">${lesson.title}</span>
+          <span class="tab-arrow" aria-hidden="true">→</span>
+        </button>`);
+
+      lessonContent.insertAdjacentHTML('beforeend', `
+        <section class="content-panel" id="panel-${lesson.id}" role="tabpanel" aria-labelledby="tab-${lesson.id}" tabindex="0" hidden>
+          <div class="panel-heading">
+            <p class="lesson-kicker">Mr. Kassil's SPH4U lessons</p>
+            <h2><span class="lesson-number">${lesson.number}</span> ${lesson.title}</h2>
+            <p class="panel-subtitle">Choose the version that works best for you.</p>
+          </div>
+          <div class="resource-area">
+            <p class="resource-intro">Two ways to follow the solution: the original handwritten process or a cleaned-up digital copy.</p>
+            <div class="resource-grid">
+              ${resourceCard(lesson, 'handwritten')}
+              ${resourceCard(lesson, 'digital')}
+            </div>
+            <p class="textbook-note"><strong>Note:</strong> Textbook problems are not included in these solutions.</p>
+          </div>
+        </section>`);
+    }
+
+    const tabs = Array.from(document.querySelectorAll('.lesson-tab'));
+    const panels = Array.from(document.querySelectorAll('.content-panel'));
+
+    function updateTabStops() {
+      for (const list of document.querySelectorAll('[role="tablist"]')) {
+        const groupTabs = Array.from(list.querySelectorAll('.lesson-tab'));
+        const focusTab = groupTabs.find(tab => tab.getAttribute('aria-selected') === 'true') || groupTabs[0];
+        for (const tab of groupTabs) tab.tabIndex = tab === focusTab ? 0 : -1;
+      }
+    }
+
+    const navigationMedia = window.matchMedia('(max-width: 920px)');
+    function updateNavigationOrientation() {
+      for (const list of document.querySelectorAll('[role="tablist"]')) {
+        list.setAttribute('aria-orientation', navigationMedia.matches ? 'horizontal' : 'vertical');
+      }
+    }
+    updateNavigationOrientation();
+    if (navigationMedia.addEventListener) navigationMedia.addEventListener('change', updateNavigationOrientation);
+
+    function selectPanel(id, moveFocus = false) {
+      const selected = tabs.find(tab => tab.dataset.panel === id) || tabs[0];
+      const unitMenu = selected.closest('.unit-group');
+      if (unitMenu) unitMenu.open = true;
+      for (const tab of tabs) {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+      }
+      updateTabStops();
+      for (const panel of panels) {
+        panel.hidden = panel.id !== `panel-${selected.dataset.panel}`;
+      }
+      if (moveFocus) selected.focus();
+      recordView(selected.dataset.panel);
+      if (location.hash !== `#${selected.dataset.panel}`) {
+        try { history.replaceState(null, '', `#${selected.dataset.panel}`); }
+        catch { /* Local previews can still switch tabs. */ }
+      }
+    }
+
+    const engagementApi = 'https://events.karolsolveskassil.ca/';
+    const optOutKey = 'siteEngagementOptOut';
+    // The opt-out is a cookie for the whole domain, so the main domain, www,
+    // and the stats page all see the same setting.
+    const optOutCookieDomain = /(^|\.)karolsolveskassil\.ca$/.test(location.hostname)
+      ? '; domain=karolsolveskassil.ca' : '';
+    function setOptOutCookie(on) {
+      document.cookie = `${optOutKey}=${on ? '1' : ''}; path=/${optOutCookieDomain}; max-age=${on ? 34560000 : 0}; secure; samesite=lax`;
+    }
+    function trackingOff() {
+      try { return document.cookie.split('; ').includes(`${optOutKey}=1`); }
+      catch { return false; }
+    }
+    const pageUrl = new URL(location.href);
+    const optOutSetting = pageUrl.searchParams.get('engagement');
+    // ?from=name tags a shared link so its visits show under that name.
+    const fromTag = (pageUrl.searchParams.get('from') || '').toLowerCase();
+    const sourceTag = /^[a-z0-9-]{1,30}$/.test(fromTag) ? fromTag : '';
+    try {
+      // Move an older per-domain opt-out into the shared cookie once.
+      if (localStorage.getItem(optOutKey) === '1') {
+        setOptOutCookie(true);
+        localStorage.removeItem(optOutKey);
+      }
+    } catch { /* Storage may be blocked; navigation still works. */ }
+    try {
+      if (optOutSetting === 'off') setOptOutCookie(true);
+      else if (optOutSetting === 'on') setOptOutCookie(false);
+      else if (trackingOff()) setOptOutCookie(true); // Renew so the opt-out does not expire.
+    } catch { /* Cookies may be blocked; navigation still works. */ }
+    if (optOutSetting === 'off' || optOutSetting === 'on' || pageUrl.searchParams.has('from')) {
+      try {
+        const cleanUrl = new URL(location.href);
+        cleanUrl.searchParams.delete('engagement');
+        cleanUrl.searchParams.delete('from');
+        history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+      } catch { /* Navigation still works if the URL cannot be cleaned. */ }
+    }
+    function visitSource() {
+      try {
+        const saved = sessionStorage.getItem('siteEngagementSource');
+        if (saved) return saved;
+      } catch { /* Fall through and work it out again. */ }
+      let source = 'direct';
+      if (sourceTag) source = `link:${sourceTag}`;
+      else if (document.referrer) {
+        try {
+          const host = new URL(document.referrer).hostname.toLowerCase().replace(/^www\./, '');
+          if (host && host !== 'karolsolveskassil.ca' && !host.endsWith('.karolsolveskassil.ca')) source = host;
+        } catch { /* Keep "direct" for an unreadable referrer. */ }
+      }
+      try { sessionStorage.setItem('siteEngagementSource', source); }
+      catch { /* The source is resent next time instead. */ }
+      return source;
+    }
+    function visitIdForTab() {
+      let id = sessionStorage.getItem('siteEngagementVisitId');
+      if (!id) {
+        id = crypto.randomUUID();
+        sessionStorage.setItem('siteEngagementVisitId', id);
+      }
+      return id;
+    }
+    function browserIdForVisits() {
+      let id = localStorage.getItem('siteEngagementBrowserId');
+      if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem('siteEngagementBrowserId', id);
+      }
+      return id;
+    }
+    async function sendPresence(visible) {
+      if (location.protocol === 'file:') return;
+      try {
+        if (trackingOff()) return;
+        await fetch(new URL('presence', engagementApi), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            visitId: visitIdForTab(), browserId: browserIdForVisits(), visible,
+            ...(visible ? { source: visitSource() } : {})
+          }),
+          keepalive: !visible,
+          cache: 'no-store'
+        });
+      } catch { /* Site navigation remains available if analytics fails. */ }
+    }
+    if (document.visibilityState === 'visible') sendPresence(true);
+    setInterval(() => {
+      if (document.visibilityState === 'visible') sendPresence(true);
+    }, 30000);
+    document.addEventListener('visibilitychange', () => sendPresence(document.visibilityState === 'visible'));
+    window.addEventListener('pagehide', () => sendPresence(false));
+
+    // A short label for what was clicked, such as "tab:1-0" or
+    // "download-pdf:1-0:digital". Labels never include page text or user data.
+    function engagementTarget(control) {
+      if (control.dataset.panel) return `tab:${control.dataset.panel}`;
+      if (control.id === 'copy-email') return 'copy-email';
+      const card = control.closest('[data-pdf]');
+      const match = card?.dataset.pdf.match(/lesson-([a-z0-9-]+)-(digital|handwritten)\.pdf$/);
+      if (match) {
+        return `${control.matches('a[download]') ? 'download-pdf' : 'view-pdf'}:${match[1]}:${match[2]}`;
+      }
+      if (control.closest('#panel-formula-sheet')) {
+        return control.matches('a[download]') ? 'download:formula-sheet' : 'open:formula-sheet';
+      }
+      if (control.id) return `button:${control.id.toLowerCase().replace(/[^a-z0-9-]/g, '-')}`.slice(0, 80);
+      if (control.matches('a[href]')) {
+        try {
+          const target = new URL(control.href, location.href);
+          if (target.origin !== location.origin) return `link:${target.hostname.toLowerCase()}`.slice(0, 80);
+        } catch { /* Fall through to "other". */ }
+      }
+      return 'other';
+    }
+    function recordEngagement(control) {
+      if (location.protocol === 'file:') return;
+      try {
+        if (trackingOff()) return;
+        fetch(engagementApi, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clickId: crypto.randomUUID(), target: engagementTarget(control) }),
+          keepalive: true
+        }).catch(() => {});
+      } catch { /* The site still works if browser storage or tracking is blocked. */ }
+    }
+    function recordDownload(link) {
+      if (location.protocol === 'file:') return;
+      try {
+        if (trackingOff()) return;
+        const fileUrl = new URL(link.href, location.href);
+        if (fileUrl.origin !== location.origin) return;
+        fetch(new URL('download', engagementApi), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            downloadId: crypto.randomUUID(), filePath: fileUrl.pathname
+          }),
+          keepalive: true
+        }).catch(() => {});
+      } catch { /* The download still works if tracking is blocked. */ }
+    }
+    document.addEventListener('click', event => {
+      if (!(event.target instanceof Element)) return;
+      const control = event.target.closest('button, a[href], .unit-summary');
+      if (!control) return;
+      recordEngagement(control);
+      if (control.matches('a[download]')) recordDownload(control);
+    }, true);
+
+    // Counts each time a lesson or page panel is opened (not repeats of the same one).
+    let lastViewedPanel = '';
+    function recordView(panel) {
+      if (location.protocol === 'file:' || panel === lastViewedPanel) return;
+      lastViewedPanel = panel;
+      try {
+        if (trackingOff()) return;
+        fetch(new URL('view', engagementApi), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ viewId: crypto.randomUUID(), visitId: visitIdForTab(), panel }),
+          keepalive: true
+        }).catch(() => {});
+      } catch { /* Navigation still works if tracking is blocked. */ }
+    }
+
+    // Pass this tab's visit to the PDF viewer, so reading there continues the same
+    // visit instead of counting a new one. Covers normal, middle and right clicks.
+    function linkViewerToVisit(event) {
+      if (!(event.target instanceof Element)) return;
+      const link = event.target.closest('a.view-link');
+      if (!link) return;
+      try {
+        const url = new URL(link.href);
+        url.searchParams.set('v', visitIdForTab());
+        link.href = url.href;
+      } catch { /* The viewer still opens; it just starts its own visit. */ }
+    }
+    for (const type of ['click', 'auxclick', 'contextmenu']) {
+      document.addEventListener(type, linkViewerToVisit, true);
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        selectPanel(tab.dataset.panel);
+      });
+      tab.addEventListener('keydown', event => {
+        const groupTabs = Array.from(tab.closest('[role="tablist"]').querySelectorAll('.lesson-tab'));
+        const index = groupTabs.indexOf(tab);
+        const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (index + 1) % groupTabs.length
+          : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (index - 1 + groupTabs.length) % groupTabs.length
+          : event.key === 'Home' ? 0
+          : event.key === 'End' ? groupTabs.length - 1
+          : -1;
+        if (next < 0) return;
+        event.preventDefault();
+        selectPanel(groupTabs[next].dataset.panel, true);
+      });
+    });
+
+    window.addEventListener('hashchange', () => selectPanel(location.hash.slice(1)));
+    selectPanel(location.hash.slice(1));
+
+    document.querySelector('#copy-email').addEventListener('click', async () => {
+      const email = 'anonymous43656@gmail.com';
+      const help = document.querySelector('#contact-help');
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(email);
+        } else {
+          const input = document.createElement('textarea');
+          input.value = email;
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          const copied = document.execCommand('copy');
+          input.remove();
+          if (!copied) throw new Error('Copy unavailable');
+        }
+        help.textContent = 'Email address copied. Paste it into your email app.';
+      } catch {
+        help.textContent = 'Copying is unavailable here. Select the email address above and copy it manually.';
+      }
+    });
+
+    if (location.protocol !== 'file:') {
+      for (const card of document.querySelectorAll('[data-pdf]')) {
+        const link = card.querySelector('.pdf-link');
+        const status = card.querySelector('.availability');
+        const previewWrap = card.querySelector('.pdf-preview-wrap');
+        fetch(card.dataset.pdf, { method: 'HEAD', cache: 'no-store' })
+          .then(response => {
+            // Pages can return the HTML fallback for a missing file.
+            // Only mark a resource available when the response is a PDF.
+            const contentType = response.headers.get('content-type') || '';
+            if (!response.ok || !/^application\/pdf(?:;|$)/i.test(contentType)) return;
+            link.hidden = false;
+            card.querySelector('.download-link').hidden = false;
+            status.textContent = 'Available now';
+            status.classList.add('available');
+            card.classList.add('is-available');
+            previewWrap.hidden = false;
+          })
+          .catch(() => { /* Missing PDFs stay marked Coming soon. */ });
+      }
+    }
+
+  </script>
+  <script>
+    (() => {
+      const graphs = document.querySelectorAll('.home-hero svg');
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function applyMotion() {
+        for (const graph of graphs) {
+          if (!graph.pauseAnimations) continue;
+          if (still.matches) { graph.setCurrentTime(1.4); graph.pauseAnimations(); }
+          else graph.unpauseAnimations();
+        }
+      }
+      applyMotion();
+      if (still.addEventListener) still.addEventListener('change', applyMotion);
+    })();
+  </script>
+  <script type="module">
+    import * as pdfjs from './vendor/pdf.min.mjs';
+
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.min.mjs', location.href).href;
+
+    async function loadPreview(card) {
+      if (card.dataset.previewLoaded) return;
+      card.dataset.previewLoaded = 'true';
+      const viewer = card.querySelector('.pdf-preview');
+      const pages = card.querySelector('.pdf-pages');
+      const status = card.querySelector('.preview-status');
+
+      try {
+        const pdf = await pdfjs.getDocument(card.dataset.pdf).promise;
+        const firstPage = await pdf.getPage(1);
+        const baseSize = firstPage.getViewport({ scale: 1 });
+        const placeholders = [];
+
+        for (let number = 1; number <= pdf.numPages; number++) {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'pdf-page';
+          placeholder.dataset.page = String(number);
+          placeholder.style.aspectRatio = `${baseSize.width} / ${baseSize.height}`;
+          placeholder.setAttribute('aria-label', `Page ${number} of ${pdf.numPages}`);
+          pages.appendChild(placeholder);
+          placeholders.push(placeholder);
+        }
+
+        async function renderPage(placeholder) {
+          if (placeholder.dataset.rendering) return;
+          placeholder.dataset.rendering = 'true';
+          try {
+            const number = Number(placeholder.dataset.page);
+            const page = number === 1 ? firstPage : await pdf.getPage(number);
+            const original = page.getViewport({ scale: 1 });
+            const width = Math.min(placeholder.clientWidth, 800);
+            const scale = width / original.width;
+            const resolution = Math.min(window.devicePixelRatio || 1, 2);
+            const viewport = page.getViewport({ scale: scale * resolution });
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(viewport.width);
+            canvas.height = Math.round(viewport.height);
+            await page.render({ canvasContext: canvas.getContext('2d'), canvas, viewport }).promise;
+            placeholder.replaceChildren(canvas);
+            placeholder.style.aspectRatio = `${original.width} / ${original.height}`;
+            status.hidden = true;
+          } catch {
+            placeholder.textContent = 'This page could not be previewed. Use View PDF above.';
+            status.textContent = 'Some pages could not be previewed. Use View PDF above.';
+          }
+        }
+
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              observer.unobserve(entry.target);
+              renderPage(entry.target);
+            }
+          }, { root: viewer, rootMargin: '300px 0px' });
+          placeholders.forEach(placeholder => observer.observe(placeholder));
+        } else {
+          for (const placeholder of placeholders) await renderPage(placeholder);
+        }
+      } catch {
+        status.textContent = 'Preview unavailable on this device. Use View PDF above.';
+      }
+    }
+
+    if (location.protocol !== 'file:') {
+      const previewObserver = 'IntersectionObserver' in window
+        ? new IntersectionObserver(entries => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                previewObserver.unobserve(entry.target);
+                loadPreview(entry.target.closest('[data-pdf]'));
+              }
+            }
+          }, { rootMargin: '250px 0px' })
+        : null;
+      for (const card of document.querySelectorAll('[data-pdf]')) {
+        if (previewObserver) previewObserver.observe(card.querySelector('.pdf-preview-wrap'));
+        else if (card.closest('.content-panel:not([hidden])')) loadPreview(card);
+      }
+      if (!previewObserver) {
+        document.querySelector('#tab-list').addEventListener('click', event => {
+          const tab = event.target.closest('[data-panel]');
+          if (!tab) return;
+          document.querySelectorAll(`#panel-${tab.dataset.panel} [data-pdf]`).forEach(loadPreview);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
