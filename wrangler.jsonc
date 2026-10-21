@@ -2,6 +2,10 @@
   // Tells Cloudflare Workers Builds to publish this folder as a static site.
   "name": "karolsolveskassil-website",
   "compatibility_date": "2026-10-19",
+  // Adds any PDF missing from pdfs/posted.json before upload.
+  "build": {
+    "command": "node tools/sync-posted.mjs"
+  },
   "assets": {
     "directory": "."
   }

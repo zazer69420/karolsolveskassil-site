@@ -1,7 +1,8 @@
 # karolsolveskassil.ca — site notes
 
 Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
-(Grade 12 University Physics) lessons. Plain HTML/CSS/JS, no build step.
+(Grade 12 University Physics) lessons. Plain HTML/CSS/JS. The only build step is
+`tools/sync-posted.mjs`, which Cloudflare runs before each deploy.
 
 ## How the site goes live
 
@@ -25,7 +26,7 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
   `Last updated · Oct 21, 2026 at 1:35 AM EDT`.
   Get the time with: `TZ=America/Toronto date "+%b %-d, %Y at %-I:%M %p %Z"`
   Changes that only touch repo files not served on the site (this file,
-  `wrangler.jsonc`, `.assetsignore`) don't need a new time.
+  `wrangler.jsonc`, `.assetsignore`, `tools/`) don't need a new time.
 - Change only what was asked. Keep the existing design and wording.
 - Don't overwrite an existing PDF without confirming it should be replaced.
 
@@ -33,10 +34,17 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
 
 - Put them in `pdfs/` named exactly `lesson-<id>-handwritten.pdf` or
   `lesson-<id>-digital.pdf`, lowercase, where `<id>` is the lesson's `id` in
-  the `lessons` array in `index.html` (e.g. `1-6`, `1-8-review`, `2-1b`).
+  `lessons.js` (e.g. `1-6`, `1-8-review`, `2-1b`).
   Uploaded files often have extra words like `-completed` or `-v2`; rename them.
-- No code change is needed. The page sends a HEAD request for each PDF and
-  swaps "Coming soon" for the View/Download buttons when the file exists.
+- Then run `node tools/sync-posted.mjs` and commit `pdfs/posted.json` with the
+  PDF. That list says which keys are posted and the date each was added (Eastern
+  time); the site reads it once instead of checking every PDF. It drives the
+  View/Download buttons, the H/D menu badges, the "x of y posted" counts, the
+  unit progress bars, What's new and the "new" dots. No code change is needed.
+- If the list isn't updated, Cloudflare's build adds the missing PDF anyway,
+  dated the day it went live, but only in the deployed copy, so commit it.
+- Dates are when a PDF reached this repo. The first 26 (Oct 20, 2026) are the day
+  the repo was created; earlier posting dates on the old site aren't known.
 - Keep each file under 25 MiB (Cloudflare's per-file limit for static assets;
   a 30 MB file fails with "Asset too large"). If an upload is too big, first
   try lossless fixes: e.g. images stored with an extra `/ASCII85Decode` filter
@@ -47,10 +55,14 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
 
 ## Adding a lesson or unit
 
-- Add an entry to the `lessons` array in `index.html` (around line 915):
-  `{"id": "2-15", "number": "2.15", "title": "..."}`. Ids must be lowercase
+- Add an entry to `window.SITE_LESSONS` in `lessons.js`:
+  `{ id: '2-15', number: '2.15', title: '...' }`. Ids must be lowercase
   letters, digits and hyphens. The part before the first hyphen is the unit
-  number; a new unit gets its own collapsible group automatically.
+  number; a new unit gets its own collapsible group automatically. The order
+  of the list is the Previous/Next order on the site and in the viewer.
+- Unit names (for the home-page unit cards and search) are `window.SITE_UNITS`
+  in `lessons.js`. Unit colours are the `[data-unit="N"]` rules in `index.html`
+  (units 1–5 are defined). A unit card with no lessons shows "Coming later".
 - Lesson-specific warnings on the handwritten card are hard-coded in
   `resourceCard()` (currently for `1-2` and `1-3b`).
 - The banner text under the header is `<p class="handwritten-notice">`.
@@ -58,10 +70,21 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
 ## Other files
 
 - `view/index.html` is the in-site PDF viewer, opened as
-  `view/?file=lesson-<id>-<format>&title=...`. It uses pdf.js from `vendor/`.
+  `view/?file=lesson-<id>-<format>&title=...`. It uses pdf.js from `vendor/`,
+  and reads `lessons.js` and `pdfs/posted.json` for the Handwritten/Digital
+  switch and Previous/Next. `view/?file=formula-sheet` shows the formula sheet
+  image with zoom.
+- Remembered only in the student's browser (localStorage): `postedKeysSeen`
+  (for "new" dots) and `viewerPosition:<file>` (reopen where they left off).
+- Phones and windows up to 920 px wide get the "Lessons" button instead of the
+  side menu; the club banner shows only on the home page there.
+- Dark mode follows the device setting: the `prefers-color-scheme: dark`
+  blocks at the end of the `<style>` in `index.html` and `view/index.html`.
+  New colours need a dark version there too.
 - Visit/download counting goes to `https://events.karolsolveskassil.ca/`, a
   separate service not in this repo.
-- `wrangler.jsonc` tells Cloudflare to publish this folder as static assets.
+- `wrangler.jsonc` tells Cloudflare to publish this folder as static assets
+  and to run `node tools/sync-posted.mjs` first.
   `.assetsignore` keeps `.git` and repo-only files off the live site; add any
   new non-site file (notes, configs) to it.
 

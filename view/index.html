@@ -143,6 +143,108 @@
     .status[hidden] { display: none; }
     .status a { color: var(--blue); font-weight: 700; }
 
+    /* Handwritten/Digital switch and "Page 3 of 15" with jump-to-page. */
+    .format-switch {
+      display: inline-flex;
+      border: 1px solid #2b4762;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .format-switch[hidden], .page-jump[hidden], .viewer-pager[hidden], .resume-note[hidden] { display: none; }
+    .format-switch a {
+      display: inline-flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 12px;
+      color: #d9e6ee;
+      font-size: .88rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .format-switch a + a { border-left: 1px solid #2b4762; }
+    .format-switch a[href]:not([aria-current]):hover { background: #12304d; color: #fff; }
+    .format-switch a[aria-current="page"] { background: var(--blue); color: #fff; }
+    .format-switch a[aria-disabled="true"] { opacity: .45; cursor: default; }
+    .page-jump {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #d9e6ee;
+      font-size: .88rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .page-jump input {
+      width: 54px;
+      height: 38px;
+      padding: 0 4px;
+      border: 1px solid #2b4762;
+      border-radius: 10px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      text-align: center;
+    }
+
+    /* Previous/Next lesson after the last page. */
+    .viewer-pager {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 900px;
+      margin: 0 auto 56px;
+      padding: 0 16px;
+    }
+    .viewer-pager a {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .viewer-pager a:hover { border-color: var(--blue); }
+    .viewer-pager .next { text-align: right; }
+    .viewer-pager .dir { color: var(--muted); font-size: .7rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .viewer-pager .name { font-weight: 800; line-height: 1.25; }
+
+    /* "Opened where you left off" note. */
+    .resume-note {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      padding: 10px 12px 10px 16px;
+      border-radius: 12px;
+      background: var(--night);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(7, 22, 41, .3);
+      font-size: .9rem;
+      transform: translateX(-50%);
+    }
+    .resume-note button {
+      flex: none;
+      padding: 6px 10px;
+      border: 1px solid #2b4762;
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .resume-note button:hover { background: #12304d; }
+    .page img { display: block; width: 100%; height: 100%; border-radius: 4px; }
+
     .back-link .long { color: inherit; }
     @media (max-width: 640px) {
       .viewer-bar { padding: 10px 14px; gap: 8px 10px; position: static; }
@@ -153,6 +255,25 @@
       .zoom-group .zoom-level { min-width: 54px; }
       .bar-button { padding: 0 12px; }
       .pages { padding: 14px 8px 48px; gap: 12px; }
+      .format-switch a { padding: 0 10px; }
+      .page-jump input { width: 46px; }
+      .viewer-pager { gap: 10px; padding: 0 8px; }
+      .viewer-pager a { padding: 12px; }
+      .viewer-pager .name { font-size: .88rem; }
+    }
+
+    /* Dark mode follows the device setting; pages stay white like paper. */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --ink: #e2ecf3;
+        --muted: #9db1c0;
+        --paper: #0b1625;
+        --white: #12263b;
+        --line: #25405a;
+      }
+      .page { background: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
+      .status a { color: #8fbaff; }
     }
   </style>
 </head>
@@ -161,6 +282,15 @@
     <a class="back-link" id="back-link" href="/"><span aria-hidden="true">←</span> Back<span class="long"> to lessons</span></a>
     <p class="doc-title"><span id="doc-format">Solution</span><strong id="doc-name">Loading…</strong></p>
     <div class="controls">
+      <div class="format-switch" id="format-switch" role="group" aria-label="Version" hidden>
+        <a id="switch-handwritten" data-format="handwritten">Handwritten</a>
+        <a id="switch-digital" data-format="digital">Digital</a>
+      </div>
+      <div class="page-jump" id="page-jump" hidden>
+        <label for="page-input">Page</label>
+        <input id="page-input" type="number" min="1" step="1" inputmode="numeric" value="1">
+        <span>of <span id="page-total">1</span></span>
+      </div>
       <div class="zoom-group" role="group" aria-label="Zoom">
         <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
         <button type="button" id="zoom-fit" class="zoom-level" aria-label="Fit to width">100%</button>
@@ -173,27 +303,89 @@
   <main>
     <p class="status" id="status" role="status">Loading solution…</p>
     <div class="pages" id="pages" tabindex="0" aria-label="Solution pages"></div>
+    <nav class="viewer-pager" id="viewer-pager" aria-label="More lessons" hidden></nav>
   </main>
+  <div class="resume-note" id="resume-note" role="status" hidden>
+    <span id="resume-text"></span>
+    <button type="button" id="resume-start">Start from page 1</button>
+  </div>
 
+  <script src="/lessons.js"></script>
   <script>
     // ----- Which solution to show -----
     const params = new URLSearchParams(location.search);
     const fileName = (params.get('file') || '').toLowerCase();
     const fileMatch = fileName.match(/^lesson-([a-z0-9-]+)-(digital|handwritten)$/);
+    const isFormulaSheet = fileName === 'formula-sheet';
     const lessonId = fileMatch ? fileMatch[1] : '';
     const format = fileMatch ? fileMatch[2] : '';
     const pdfPath = fileMatch ? `/pdfs/${fileName}.pdf` : '';
-    const lessonTitle = (params.get('title') || '').slice(0, 120) || (lessonId ? `Lesson ${lessonId}` : 'Solution');
-    const formatLabel = format === 'handwritten' ? 'Handwritten solution' : format === 'digital' ? 'Clean digital solution' : 'Solution';
+    const downloadPath = isFormulaSheet ? '/images/sph4u-formula-sheet.png' : pdfPath;
+    const lessonList = window.SITE_LESSONS || [];
+    const lessonIndex = lessonList.findIndex(lesson => lesson.id === lessonId);
+    const lesson = lessonList[lessonIndex];
+    const lessonTitle = (params.get('title') || '').slice(0, 120)
+      || (lesson ? `${lesson.number} ${lesson.title}` : lessonId ? `Lesson ${lessonId}` : isFormulaSheet ? 'SPH4U Formula Sheet' : 'Solution');
+    const formatLabel = format === 'handwritten' ? 'Handwritten solution' : format === 'digital' ? 'Clean digital solution'
+      : isFormulaSheet ? 'Quick reference' : 'Solution';
+    // Read by the page-drawing script below.
+    window.viewerFile = pdfPath ? { kind: 'pdf', path: pdfPath, name: fileName, inLessonList: Boolean(lesson) }
+      : isFormulaSheet ? { kind: 'image', path: downloadPath, name: fileName, width: 1870, height: 2420 } : null;
 
     document.getElementById('doc-name').textContent = lessonTitle;
     document.getElementById('doc-format').textContent = formatLabel;
     document.title = `${lessonTitle} · ${formatLabel} · karolsolveskassil.ca`;
     if (lessonId) document.getElementById('back-link').href = `/#${lessonId}`;
-    if (pdfPath) {
+    if (isFormulaSheet) document.getElementById('back-link').href = '/#formula-sheet';
+    if (downloadPath) {
       const download = document.getElementById('download-link');
-      download.href = pdfPath;
+      download.href = downloadPath;
       download.hidden = false;
+    }
+
+    // ----- Switching version and moving between lessons -----
+    const viewerUrl = (item, itemFormat) =>
+      `/view/?file=lesson-${item.id}-${itemFormat}&title=${encodeURIComponent(`${item.number} ${item.title}`)}`;
+    // Prefer the same version; otherwise the other one; otherwise the lesson on the main page.
+    function linkFor(item, posted) {
+      const other = format === 'handwritten' ? 'digital' : 'handwritten';
+      if (!posted || posted[item.id]?.[format]) return viewerUrl(item, format);
+      if (posted[item.id]?.[other]) return viewerUrl(item, other);
+      return `/#${item.id}`;
+    }
+    function showLessonLinks(posted) {
+      if (!lesson) return;
+      const formatSwitch = document.getElementById('format-switch');
+      for (const link of formatSwitch.querySelectorAll('a')) {
+        const linkFormat = link.dataset.format;
+        if (linkFormat === format) {
+          link.setAttribute('aria-current', 'page');
+          link.removeAttribute('href');
+        } else if (!posted || posted[lesson.id]?.[linkFormat]) {
+          link.href = viewerUrl(lesson, linkFormat);
+          link.removeAttribute('aria-disabled');
+          link.removeAttribute('title');
+        } else {
+          link.removeAttribute('href');
+          link.setAttribute('aria-disabled', 'true');
+          link.title = 'Not posted yet';
+        }
+      }
+      formatSwitch.hidden = false;
+      const pager = document.getElementById('viewer-pager');
+      const cell = (item, direction) => (item ? `
+        <a class="${direction}" href="${linkFor(item, posted)}">
+          <span class="dir">${direction === 'prev' ? '← Previous lesson' : 'Next lesson →'}</span>
+          <span class="name">${item.number} ${item.title}</span>
+        </a>` : '<span aria-hidden="true"></span>');
+      pager.innerHTML = cell(lessonList[lessonIndex - 1], 'prev') + cell(lessonList[lessonIndex + 1], 'next');
+    }
+    showLessonLinks(null);
+    if (lesson && location.protocol !== 'file:') {
+      fetch('/pdfs/posted.json', { cache: 'no-cache' })
+        .then(response => (response.ok ? response.json() : null))
+        .then(posted => { if (posted) showLessonLinks(posted); })
+        .catch(() => { /* Links stay pointed at the same version. */ });
     }
 
     // ----- Tracking: same rules as the main page -----
@@ -279,11 +471,12 @@
 
     // Only the Download button counts as an engagement here; zooming and the back link don't.
     document.getElementById('download-link').addEventListener('click', () => {
-      if (location.protocol === 'file:' || !pdfPath) return;
+      if (location.protocol === 'file:' || !downloadPath) return;
       try {
         if (trackingOff()) return;
-        postEvent('', { clickId: crypto.randomUUID(), target: `download-pdf:${lessonId}:${format}` }, true).catch(() => {});
-        postEvent('download', { downloadId: crypto.randomUUID(), filePath: pdfPath }, true).catch(() => {});
+        const target = isFormulaSheet ? 'download:formula-sheet' : `download-pdf:${lessonId}:${format}`;
+        postEvent('', { clickId: crypto.randomUUID(), target }, true).catch(() => {});
+        postEvent('download', { downloadId: crypto.randomUUID(), filePath: downloadPath }, true).catch(() => {});
       } catch { /* The download still works if tracking is blocked. */ }
     });
   </script>
@@ -297,7 +490,10 @@
     const zoomOut = document.getElementById('zoom-out');
     const zoomIn = document.getElementById('zoom-in');
     const zoomFit = document.getElementById('zoom-fit');
-    const pdfPath = document.getElementById('download-link').hidden ? '' : new URL(document.getElementById('download-link').href).pathname;
+    const viewerFile = window.viewerFile;
+    const bar = document.querySelector('.viewer-bar');
+    const pageJump = document.getElementById('page-jump');
+    const pageInput = document.getElementById('page-input');
     const ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
     let zoom = 1;
     let pdf = null;
@@ -324,6 +520,7 @@
     }
 
     async function renderPage(page) {
+      if (page.image) return; // The formula sheet is an image; the browser scales it.
       const width = cssWidthFor(page);
       if (page.renderedAt === width) return;
       page.renderedAt = width;
@@ -386,11 +583,113 @@
       resizeTimer = setTimeout(() => { if (pages.length) applyZoom(zoom); }, 150);
     }).observe(pagesEl);
 
+    // ----- Page number, jump to page, and reopening where the student left off -----
+    // The reading line sits a third of the way down the screen, below the sticky bar.
+    function barHeight() {
+      return getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight : 0;
+    }
+    function readingLine() {
+      return barHeight() + (innerHeight - barHeight()) * 0.3;
+    }
+    function currentPosition() {
+      const line = readingLine();
+      let current = pages[0];
+      for (const page of pages) {
+        if (page.element.getBoundingClientRect().top <= line) current = page;
+        else break;
+      }
+      const box = current.element.getBoundingClientRect();
+      return { page: current.number, fraction: Math.min(Math.max((line - box.top) / box.height, 0), 1) };
+    }
+    function scrollToPosition(number, fraction = 0) {
+      const page = pages[Math.min(Math.max(number, 1), pages.length) - 1];
+      const box = page.element.getBoundingClientRect();
+      const target = fraction ? box.top + fraction * box.height - readingLine() : box.top - barHeight() - 12;
+      scrollTo(scrollX, scrollY + target);
+    }
+    pageInput.addEventListener('change', () => {
+      const number = Math.round(Number(pageInput.value));
+      if (number >= 1 && pages.length) scrollToPosition(number);
+    });
+    pageInput.addEventListener('keydown', event => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      pageInput.dispatchEvent(new Event('change'));
+    });
+
+    const resumeNote = document.getElementById('resume-note');
+    let resumeTimer;
+    let resumeScrollY = 0;
+    const positionKey = viewerFile ? `viewerPosition:${viewerFile.name}` : '';
+    let tracking = false;
+    let saveTimer;
+    function savePosition() {
+      if (!tracking) return;
+      try { localStorage.setItem(positionKey, JSON.stringify(currentPosition())); }
+      catch { /* Reading still works; the place just isn't remembered. */ }
+    }
+    let frame = 0;
+    addEventListener('scroll', () => {
+      if (!tracking || frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        if (document.activeElement !== pageInput) pageInput.value = String(currentPosition().page);
+        if (!resumeNote.hidden && Math.abs(scrollY - resumeScrollY) > 300) hideResumeNote();
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(savePosition, 300);
+      });
+    }, { passive: true });
+    addEventListener('pagehide', savePosition);
+
+    function hideResumeNote() {
+      resumeNote.hidden = true;
+      clearTimeout(resumeTimer);
+    }
+    document.getElementById('resume-start').addEventListener('click', () => {
+      scrollToPosition(1);
+      hideResumeNote();
+    });
+    function restorePosition() {
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(positionKey) || 'null'); }
+      catch { /* Start at the top. */ }
+      if (saved && Number.isInteger(saved.page) && saved.page <= pages.length && (saved.page > 1 || saved.fraction > .2)) {
+        scrollToPosition(saved.page, Number(saved.fraction) || 0);
+        document.getElementById('resume-text').textContent = `Opened where you left off: page ${saved.page}.`;
+        resumeNote.hidden = false;
+        resumeScrollY = scrollY;
+        resumeTimer = setTimeout(hideResumeNote, 9000);
+      }
+      pageInput.value = String(currentPosition().page);
+      tracking = true;
+    }
+
+    function showImage() {
+      const element = document.createElement('div');
+      element.className = 'page';
+      element.dataset.index = '0';
+      const image = document.createElement('img');
+      image.src = viewerFile.path;
+      image.alt = 'SPH4U physics formula sheet with equations for kinematics, dynamics, energy, collisions, fields, waves, and relativity';
+      element.append(image);
+      const page = { element, number: 1, viewport: { width: viewerFile.width, height: viewerFile.height }, image: true };
+      pages.push(page);
+      sizePage(page);
+      pagesEl.append(element);
+      status.hidden = true;
+      zoomOut.disabled = zoom <= ZOOMS[0];
+    }
+
     async function load() {
-      if (!pdfPath) {
+      if (!viewerFile) {
         showProblem('This link doesn\'t point to a solution. <a href="/">Go to the lessons</a>.');
         return;
       }
+      if (viewerFile.kind === 'image') {
+        showImage();
+        return;
+      }
+      const pdfPath = viewerFile.path;
       try {
         pdf = await pdfjs.getDocument(pdfPath).promise;
       } catch {
@@ -415,6 +714,11 @@
       }
       status.hidden = true;
       zoomOut.disabled = zoom <= ZOOMS[0];
+      document.getElementById('page-total').textContent = String(pdf.numPages);
+      pageInput.max = String(pdf.numPages);
+      pageJump.hidden = false;
+      document.getElementById('viewer-pager').hidden = !viewerFile.inLessonList;
+      restorePosition();
     }
     load();
   </script>

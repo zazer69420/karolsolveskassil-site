@@ -55,7 +55,12 @@ Lesson 1.9b — Length Contraction and Relative Velocities
 
 Unit 2 and later lessons follow the same pattern:
   lesson-<id>-handwritten.pdf and lesson-<id>-digital.pdf, where <id> is the
-  lesson's "id" in the lessons list in index.html (for example 2-1b).
+  lesson's "id" in lessons.js (for example 2-1b).
+
+After adding a PDF, run   node tools/sync-posted.mjs   and commit the updated
+pdfs/posted.json along with it. That list records the date each key was added
+and is what the site uses to show it. If it isn't updated, Cloudflare adds the
+missing PDF during the build, dated the day it goes live.
 
 The site is published by Cloudflare Workers Builds, which is connected to this
 GitHub repository. After adding or replacing PDFs, get the change onto the
