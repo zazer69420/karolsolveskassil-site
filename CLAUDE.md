@@ -38,7 +38,10 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
 - No code change is needed. The page sends a HEAD request for each PDF and
   swaps "Coming soon" for the View/Download buttons when the file exists.
 - Keep each file under 25 MiB (Cloudflare's per-file limit for static assets;
-  a 30 MB file fails with "Asset too large"). Current PDFs are all under 10 MB.
+  a 30 MB file fails with "Asset too large"). If an upload is too big, first
+  try lossless fixes: e.g. images stored with an extra `/ASCII85Decode` filter
+  can be decoded to plain `/FlateDecode` with pypdf (cut 1.8b from 27.9 MB to
+  22.1 MB with pixel-identical pages). Compare `pdftoppm` renders afterwards.
 - Check a PDF's content matches the lesson before publishing, not just its
   file name.
 
