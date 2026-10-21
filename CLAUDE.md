@@ -17,8 +17,6 @@ Static site with handwritten and digital solutions for Mr. Kassil's SPH4U
   build succeeds. The build log is on the karolsolveskassil-website Worker's
   build page in the Cloudflare dashboard (linked from the ✕ check on GitHub);
   it needs the owner's login.
-- `pdfs/README.txt` still describes manually uploading the folder to Cloudflare.
-  That is no longer needed; merging to `main` deploys.
 
 ## Rules for every update
 
