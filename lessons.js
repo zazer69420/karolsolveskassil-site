@@ -37,6 +37,5 @@ window.SITE_LESSONS = [
   { id: '2-9b', number: '2.9b', title: 'Problem Solving' },
   { id: '2-10', number: '2.10', title: 'Gravitation and Satellites' },
   { id: '2-11', number: '2.11', title: 'Dark Matter' },
-  { id: '2-12', number: '2.12', title: 'Artificial Gravity' },
-  { id: '2-14', number: '2.14', title: 'Review Questions from Text' }
+  { id: '2-12', number: '2.12', title: 'Artificial Gravity' }
 ];
