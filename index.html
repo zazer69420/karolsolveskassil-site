@@ -305,12 +305,21 @@
       letter-spacing: .14em;
       text-transform: uppercase;
     }
+    /* The headline sits in an outlined box; its size follows the panel width so it stays on two lines. */
+    .home-copy { container-type: inline-size; }
     .home-copy h1 {
-      max-width: none;
-      margin: 0 0 22px;
-      font-size: clamp(2.6rem, 5.4vw, 4.8rem);
-      line-height: .96;
-      letter-spacing: -.065em;
+      display: inline-block;
+      max-width: min(100%, 20em); /* About half the sentence per line. */
+      margin: 0;
+      padding: .42em .65em;
+      border: 1px solid rgba(24, 183, 214, .5);
+      border-radius: 14px;
+      background: rgba(24, 183, 214, .10);
+      color: #e8f4f8;
+      font-size: clamp(1rem, 2.4vw, 2.6rem);
+      font-size: clamp(.9rem, 4.9cqi, 2.6rem);
+      line-height: 1.12;
+      letter-spacing: -.035em;
     }
     .hero-punch {
       display: inline-flex;
@@ -674,7 +683,11 @@
       .page-shell { padding: 23px 14px 46px; }
       .course-line { font-size: .68rem; gap: 7px; text-align: center; }
       .home-hero { min-height: 0; padding: 28px 20px 24px; }
-      .home-copy h1 { margin-bottom: 0; font-size: clamp(1.9rem, 8.4vw, 2.3rem); }
+      .home-copy h1 { padding: .5em .7em; border-radius: 12px; }
+    }
+    @media (max-width: 350px) {
+      .home-hero { padding-left: 16px; padding-right: 16px; }
+      .home-copy h1 { padding: .5em .55em; font-size: .9rem; letter-spacing: -.04em; }
       .hero-punch { border-radius: 14px; align-items: flex-start; }
       .panel-heading { padding: 29px 24px 25px; }
       .resource-area { padding: 25px 22px 34px; }
@@ -986,7 +999,7 @@
     <div class="header-inner">
       <p class="handwritten-notice"><strong>New · Unit 2 added / Answer keys are being worked on and posted</strong></p>
       <p class="site-name"><img class="site-logo" src="favicon.svg" alt="" width="64" height="64"><span>karolsolveskassil<span class="dot">.</span>ca</span></p>
-      <p class="update-note"><strong>Last updated · Oct 21, 2026 at 3:54 PM EDT</strong></p>
+      <p class="update-note"><strong>Last updated · Oct 21, 2026 at 3:59 PM EDT</strong></p>
     </div>
   </header>
 
