@@ -238,7 +238,7 @@
     .lesson-tab {
       width: 100%;
       display: grid;
-      grid-template-columns: 48px minmax(0, 1fr) auto;
+      grid-template-columns: 48px minmax(0, 1fr) auto auto;
       gap: 12px;
       align-items: center;
       padding: 12px;
@@ -376,14 +376,16 @@
     .formula-area { padding: 38px 40px 46px; }
     .formula-actions { margin: 0 0 20px; display:flex; flex-wrap:wrap; gap:12px; }
     .formula-actions .pdf-link { width: auto; max-width: 100%; }
-    .formula-sheet-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    .formula-sheet-link {
+      display: block;
+      overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 14px;
       background: white;
+      cursor: zoom-in;
     }
-    .formula-sheet-image { display: block; width: 100%; min-width: 760px; height: auto; }
+    .formula-sheet-image { display: block; width: 100%; height: auto; }
+    .formula-hint { margin: 12px 0 0; color: var(--muted); font-size: .85rem; }
 
     .panel-heading {
       position: relative;
@@ -406,9 +408,8 @@
     .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
     .resource-card {
       position: relative;
-      min-height: 240px;
       overflow: hidden;
-      padding: 25px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
       border: 1px solid #d6e3ea;
@@ -433,7 +434,7 @@
     }
     .handwritten .format-tag { background: #ffe6d3; color: #b74d0b; }
     .resource-card h3 { margin: 0 0 7px; font-size: 1.35rem; line-height: 1.15; }
-    .resource-card p { margin: 0 0 24px; color: var(--muted); font-size: .9rem; }
+    .resource-card p { margin: 0 0 18px; color: var(--muted); font-size: .9rem; }
     .resource-card .resource-warning {
       margin: 0 0 20px;
       padding: 10px 12px;
@@ -444,31 +445,25 @@
       font-size: .85rem;
     }
     .resource-card.is-available {
-      border: 3px solid var(--green);
+      border-color: #9fd5bd;
       background: var(--white);
-      box-shadow: 0 18px 42px rgba(23, 134, 92, .20);
     }
-    .resource-card.is-available h3 { font-size: 1.5rem; }
-    .resource-bottom {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-    }
-    .availability { color: #8b9aa4; font-size: .78rem; font-weight: 850; }
-    .availability.available {
-      padding: 12px 15px;
-      border-radius: 10px;
-      background: var(--green);
-      color: white;
-      box-shadow: 0 8px 20px rgba(23, 134, 92, .22);
-      font-size: .95rem;
-      font-weight: 950;
-      letter-spacing: .09em;
-      text-align: center;
+    .resource-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .resource-actions[hidden] { display: none; }
+    .resource-actions .pdf-link { flex: 1 1 0; min-width: 0; padding: 11px 14px; font-size: .88rem; }
+    .availability {
+      margin-left: auto;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #eef2f5;
+      color: #6d7f8c;
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .08em;
       text-transform: uppercase;
+      white-space: nowrap;
     }
+    .availability.available { background: #dcf3ea; color: #12704c; }
     .pdf-link {
       display: inline-flex;
       align-items: center;
@@ -631,7 +626,7 @@
 
 
     /* Icons on the solution cards */
-    .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
     .card-top .format-tag { margin-bottom: 0; }
     .card-icon {
       flex: none;
@@ -674,26 +669,29 @@
       .page-shell { padding: 28px 20px 64px; }
       .course-line { margin-bottom: 18px; }
       .workspace { display: block; }
-      .lesson-nav { position: static; max-height: none; margin-bottom: 18px; padding: 12px; overflow: visible; }
+      .lesson-nav { position: static; max-height: none; margin-bottom: 18px; padding: 10px; overflow: visible; }
       .nav-heading { display: none; }
-      .tab-list { flex-direction: row; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: thin; }
-      .lesson-tab { flex: 0 0 215px; grid-template-columns: 44px minmax(0,1fr); }
-      .tab-arrow { display: none; }
-      .home-hero, .content-panel { min-height: 570px; }
+      .nav-body { display: none; padding-top: 12px; }
+      .lesson-nav.is-open .nav-body { display: block; }
+      .lesson-tab:hover { transform: none; }
+      .content-panel { min-height: 570px; }
+      #panel-home { min-height: 0; }
+      body:not([data-panel="home"]) .club-banner { display: none; }
     }
     @media (max-width: 650px) {
       .header-inner { padding: 20px 16px; }
       .site-name { font-size: clamp(1.8rem, 9vw, 2.8rem); }
       .page-shell { padding: 23px 14px 46px; }
       .course-line { font-size: .68rem; gap: 7px; text-align: center; }
-      .home-hero { min-height: 590px; padding: 39px 25px; }
+      .home-hero { min-height: 0; padding: 28px 20px 24px; }
+      .home-copy h1 { margin-bottom: 16px; font-size: clamp(2rem, 9vw, 2.4rem); }
+      .hero-lead { margin-bottom: 0; font-size: 1rem; }
       .hero-punch { border-radius: 14px; align-items: flex-start; }
       .panel-heading { padding: 29px 24px 25px; }
       .resource-area { padding: 25px 22px 34px; }
       .contact-area { padding: 25px 22px 34px; }
       .formula-area { padding: 25px 22px 34px; }
       .resource-grid { grid-template-columns: 1fr; }
-      .resource-card { min-height: 215px; }
       .pdf-preview { height: 380px; }
       .content-panel { min-height: 520px; border-radius: 19px; }
     }
@@ -712,6 +710,286 @@
       .unit:last-child svg { max-width: 50%; margin: 0 auto; }
       .site-name { font-size: clamp(1.4rem, 7.4vw, 2.6rem); }
     }
+
+    /* Lessons button (narrow screens only), search box, H/D badges and "new" dots */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .nav-toggle {
+      display: none;
+      width: 100%;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid #cfe0e9;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .nav-toggle-icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+    }
+    .nav-toggle-icon svg { width: 20px; height: 20px; }
+    .nav-toggle-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+    .nav-toggle-label { color: var(--muted); font-size: .68rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .nav-toggle-current { overflow: hidden; font-weight: 800; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+    .lesson-nav.is-open .nav-toggle .unit-chevron { transform: rotate(180deg); }
+    .nav-search { position: relative; margin: 0 0 12px; }
+    .nav-search svg {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      width: 17px;
+      height: 17px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .nav-search input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px 0 37px;
+      border: 1px solid #cbdbe5;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+      font-size: .92rem;
+    }
+    .nav-search input::placeholder { color: #8a9ca9; }
+    .nav-search input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .search-empty { margin: 0 6px 12px; color: var(--muted); font-size: .88rem; }
+    .search-empty[hidden], .lesson-tab[hidden], .unit-group[hidden], .new-dot[hidden] { display: none; }
+    .tab-keys { display: inline-flex; gap: 3px; }
+    .tab-keys:empty { display: none; }
+    .key-chip {
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      font-size: .6rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .key-chip.on { background: #dcf3ea; color: #12704c; }
+    .key-chip.off { border: 1px dashed #c3d2dc; color: #a3b4c0; }
+    .tab-code { position: relative; }
+    .lesson-tab.is-new .tab-code::after {
+      content: "";
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 2px var(--white);
+    }
+    .new-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+    .unit-group.flash .unit-summary { outline: 3px solid var(--unit, var(--orange)); outline-offset: 2px; }
+
+    /* Unit colours: menu header, lesson number tiles and lesson heading */
+    [data-unit="1"] { --unit: #1769e0; --unit-soft: #e6f1f7; --unit-bright: #4f9bff; }
+    [data-unit="2"] { --unit: #5b3fd6; --unit-soft: #ece7ff; --unit-bright: #a48bff; }
+    [data-unit="3"] { --unit: #12704c; --unit-soft: #dcf3ea; --unit-bright: #3ccf91; }
+    [data-unit="4"] { --unit: #b54a0c; --unit-soft: #ffe9d9; --unit-bright: #ff8a3d; }
+    [data-unit="5"] { --unit: #0b7891; --unit-soft: #d9f3f8; --unit-bright: #18b7d6; }
+    .unit-group[data-unit] .unit-summary { background: var(--unit-soft); box-shadow: inset 4px 0 0 var(--unit); }
+    .unit-group[data-unit] .unit-summary:hover { filter: brightness(.97); }
+    .unit-group[data-unit] .unit-summary > span:first-child { color: var(--unit); white-space: nowrap; }
+    .lesson-tab[data-unit] .tab-code { background: var(--unit-soft); color: var(--unit); }
+    .lesson-tab[data-unit][aria-selected="true"] .tab-code { background: var(--unit); color: #fff; }
+    .lesson-tab[data-unit][aria-selected="true"] { box-shadow: inset 4px 0 0 var(--unit), 0 10px 28px rgba(7, 22, 41, .09); }
+    .content-panel[data-unit] .panel-heading { border-top: 6px solid var(--unit); }
+    .content-panel[data-unit] .lesson-kicker { color: var(--unit); }
+
+    /* Unit cards on the home page */
+    .unit {
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+      font: inherit;
+      text-align: center;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .unit:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--unit-bright); background: rgba(255, 255, 255, .08); }
+    .unit:disabled { cursor: default; }
+    .unit:disabled svg { opacity: .55; }
+    .unit [hidden] { display: none; }
+    .unit-label { display: block; margin-top: 8px; color: #e8f4f8; font-size: .85rem; font-weight: 800; }
+    .unit-meta { display: block; margin-top: 2px; color: #b9cad6; font-size: .74rem; font-weight: 650; }
+    .unit-progress {
+      display: block;
+      height: 6px;
+      margin: 9px 6px 0;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .14);
+    }
+    .unit-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--unit-bright); transition: width .4s ease; }
+    .unit-keys { display: block; margin-top: 5px; color: #b9cad6; font-size: .72rem; }
+
+    /* What's new on the home page */
+    .whats-new { position: relative; z-index: 1; margin-top: 30px; }
+    .whats-new[hidden] { display: none; }
+    .whats-new h2 {
+      margin: 0 0 10px;
+      color: var(--cyan);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .whats-new ol { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+    .whats-new a {
+      display: inline-block;
+      padding: 4px 0 4px 14px;
+      border-left: 2px solid rgba(255, 255, 255, .22);
+      color: #e8f4f8;
+      font-weight: 650;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+    .whats-new a:hover { border-left-color: var(--cyan); text-decoration: underline; }
+
+    /* Previous and Next lesson buttons */
+    .lesson-pager {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+    .pager-link {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 16px;
+      border: 1px solid #cfe0e9;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .pager-link.next { text-align: right; }
+    .pager-link:hover { border-color: var(--blue); background: #f3f8ff; }
+    .pager-dir { color: var(--muted); font-size: .7rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .pager-name { font-weight: 800; line-height: 1.25; }
+
+    @media (max-width: 920px) {
+      .nav-toggle { display: flex; }
+    }
+    .card-top .format-tag { align-self: center; }
+
+    /* Phones: compact header and slim club banner so the page starts on the first screen */
+    @media (max-width: 650px) {
+      .whats-new li:nth-child(n+4) { display: none; }
+      .resource-card { padding: 18px; }
+      .card-top { gap: 8px; margin-bottom: 14px; }
+      .availability { padding: 3px 7px; font-size: .62rem; letter-spacing: .06em; }
+      .card-icon { width: 38px; height: 38px; border-radius: 10px; }
+      .format-tag { white-space: nowrap; }
+      .resource-actions .pdf-link { padding: 10px; font-size: .8rem; letter-spacing: .04em; white-space: nowrap; }
+      .header-inner { min-height: 0; padding: 12px 16px 14px; gap: 5px; }
+      .site-name { font-size: 1.55rem; }
+      .handwritten-notice strong { margin: 0; font-size: .72rem; letter-spacing: .05em; line-height: 1.35; }
+      .update-note strong { font-size: .66rem; }
+      .page-shell { padding-top: 14px; }
+      .club-banner { gap: 4px 12px; margin-bottom: 12px; padding: 10px 14px; border-top-width: 3px; border-radius: 14px; }
+      .club-banner h2 { font-size: .92rem; }
+      .classroom-code { gap: 8px; font-size: .82rem; }
+      .classroom-icon { width: 22px; height: 22px; flex-basis: 22px; }
+      .classroom-code code { margin: 0 0 0 4px; padding: 2px 8px; font-size: .9rem; }
+      .course-line { margin-bottom: 12px; padding: 5px 12px; font-size: .62rem; }
+      .lesson-nav { margin-bottom: 14px; }
+      .whats-new { margin-top: 20px; }
+      .whats-new a { font-size: .92rem; }
+      .hero-units { margin-top: 22px; padding-top: 20px; }
+      .lesson-pager { gap: 10px; }
+      .pager-link { padding: 12px; }
+      .pager-name { font-size: .88rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .unit, .unit-progress span { transition: none; }
+    }
+
+    /* Dark mode follows the device setting. PDF pages and the formula sheet stay white like paper. */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --ink: #e2ecf3;
+        --muted: #9db1c0;
+        --paper: #0b1625;
+        --white: #12263b;
+        --line: #25405a;
+        --shadow: 0 22px 60px rgba(0, 0, 0, .35);
+      }
+      body {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 .5H.5V28' fill='none' stroke='white' stroke-opacity='.035'/%3E%3C/svg%3E");
+      }
+      [data-unit="1"] { --unit: #6aa6ff; --unit-soft: #15304f; }
+      [data-unit="2"] { --unit: #b3a1ff; --unit-soft: #262150; }
+      [data-unit="3"] { --unit: #6fd8a7; --unit-soft: #123628; }
+      [data-unit="4"] { --unit: #ffad73; --unit-soft: #3a2412; }
+      [data-unit="5"] { --unit: #5fd3ea; --unit-soft: #0f3340; }
+      .lesson-tab[data-unit][aria-selected="true"] .tab-code { color: #0b1625; }
+      .club-banner { box-shadow: none; }
+      .classroom-code code { border-color: #24573f; background: #123426; color: #7fe0b0; }
+      .course-line { border-color: #2a4a78; background: #13294a; color: #8fbaff; }
+      .lesson-nav { border-color: var(--line); background: rgba(18, 38, 59, .82); box-shadow: none; }
+      .lesson-tab { color: #a9bccb; }
+      .lesson-tab:hover { background: #17304a; }
+      .lesson-tab[aria-selected="true"] { border-color: #2c4a66; background: #1a3550; }
+      .lesson-tab.is-new .tab-code::after { box-shadow: 0 0 0 2px #12263b; }
+      #tab-home .tab-code { background: #3a2412; color: #ffb27a; }
+      #tab-contact .tab-code { background: #2a2350; color: #b9a6ff; }
+      #tab-formula-sheet .tab-code { background: #12342a; color: #7fe0b0; }
+      .nav-toggle, .nav-search input, .pager-link { border-color: #2c4a66; }
+      .key-chip.on { background: #12342a; color: #7fe0b0; }
+      .key-chip.off { border-color: #35506a; color: #6f8799; }
+      .content-panel { background: #11233a; }
+      .panel-heading { background-color: #11233a; }
+      .resource-intro, .contact-card p { color: #a9bccb; }
+      .resource-card { border-color: #2a4560; background: #142b43; }
+      .resource-card.digital { background: #13294a; }
+      .resource-card.handwritten { background: #2a2117; }
+      .resource-card:hover { border-color: #3a5a78; box-shadow: 0 16px 32px rgba(0, 0, 0, .3); }
+      .resource-card.is-available { border-color: #2e7a58; background: #12263b; }
+      .format-tag, .digital .card-icon { background: #17325a; color: #8fbaff; }
+      .handwritten .format-tag, .handwritten .card-icon { background: #3a2412; color: #ffb27a; }
+      .resource-card .resource-warning { background: #3a2a12; color: #ffd9a8; }
+      .availability { background: #1d3349; color: #9db1c0; }
+      .availability.available { background: #12342a; color: #7fe0b0; }
+      .pdf-link.download-link { color: #8fbaff; }
+      .pdf-link.download-link:hover { background: #17304a; }
+      .pdf-preview-wrap { border-color: var(--line); background: #0f2034; }
+      .pdf-preview { border-color: var(--line); background: #0b1828; }
+      .contact-card { border-color: var(--line); border-left-color: var(--violet); background: #142b43; }
+      .copy-email { border-color: #3a5a78; }
+      .copy-email:hover, .pager-link:hover { background: #1a3550; }
+      .site-footer { color: #9db1c0; }
+    }
   </style>
 </head>
 <body>
@@ -719,7 +997,7 @@
     <div class="header-inner">
       <p class="handwritten-notice"><strong>New · Unit 2 added / Answer keys are being worked on and posted</strong></p>
       <p class="site-name"><img class="site-logo" src="favicon.svg" alt="" width="64" height="64"><span>karolsolveskassil<span class="dot">.</span>ca</span></p>
-      <p class="update-note"><strong>Last updated · Oct 21, 2026 at 10:11 AM EDT</strong></p>
+      <p class="update-note"><strong>Last updated · Oct 21, 2026 at 3:14 PM EDT</strong></p>
     </div>
   </header>
 
@@ -745,8 +1023,24 @@
     <p class="course-line">Grade 12 University Physics <span aria-hidden="true">•</span> SPH4U</p>
 
     <div class="workspace">
-      <nav class="lesson-nav" aria-label="Course navigation">
+      <nav class="lesson-nav" id="lesson-nav" aria-label="Course navigation">
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-body">
+          <span class="nav-toggle-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+          <span class="nav-toggle-text">
+            <span class="nav-toggle-label">Lessons</span>
+            <span class="nav-toggle-current" id="nav-current">Home</span>
+          </span>
+          <span class="new-dot" id="nav-new-dot" hidden></span>
+          <svg class="unit-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="nav-body" id="nav-body">
         <p class="nav-heading">Course map <span>29 lessons</span></p>
+        <div class="nav-search" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <label class="visually-hidden" for="lesson-search">Search lessons</label>
+          <input type="search" id="lesson-search" placeholder="Search, e.g. 2.4 or pulley" autocomplete="off" spellcheck="false">
+        </div>
+        <p class="search-empty" id="search-empty" role="status" hidden></p>
         <div class="tab-list" id="tab-list" role="tablist" aria-label="Site pages" aria-orientation="vertical">
           <button class="lesson-tab" type="button" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true" tabindex="0" data-panel="home">
             <span class="tab-code home-code" aria-hidden="true">⌂</span>
@@ -765,6 +1059,7 @@
           </button>
         </div>
         <div class="unit-groups" id="unit-groups"></div>
+        </div>
       </nav>
 
       <div class="lesson-content" id="lesson-content">
@@ -774,9 +1069,13 @@
               <h1>Unlike Mr. Kassil's website, this website actually gives you the answers.</h1>
               <p class="hero-lead">Handwritten and digital solutions for every one of Mr. Kassil's lessons.</p>
             </div>
-           <div class="hero-units" aria-hidden="true">
-              <div class="unit">
-                <svg id="hero-graph" viewBox="0 0 320 240" focusable="false">
+            <section class="whats-new" id="whats-new" aria-labelledby="whats-new-title" hidden>
+              <h2 id="whats-new-title">What's new</h2>
+              <ol id="whats-new-list"></ol>
+            </section>
+           <div class="hero-units" role="group" aria-label="Units">
+              <button class="unit" type="button" data-unit="1">
+                <svg id="hero-graph" viewBox="0 0 320 240" focusable="false" aria-hidden="true">
                 <defs>
                   <marker id="head-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8fa6b8"/></marker>
                   <marker id="head-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a48bff"/></marker>
@@ -804,10 +1103,13 @@
                   </animateMotion>
                 </circle>
               </svg>
-                <p class="unit-label">Kinematics</p>
-              </div>
-              <div class="unit">
-                <svg viewBox="0 0 120 80" focusable="false">
+                <span class="unit-label">Kinematics</span>
+                <span class="unit-meta"></span>
+                <span class="unit-progress" aria-hidden="true"><span></span></span>
+                <span class="unit-keys"></span>
+              </button>
+              <button class="unit" type="button" data-unit="2">
+                <svg viewBox="0 0 120 80" focusable="false" aria-hidden="true">
                   <defs><marker id="u1-18b7d6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18b7d6"/></marker><marker id="u1-ff8a3d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker></defs>
                   <circle cx="60" cy="40" r="26" fill="none" stroke="#8fa6b8" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="3 5"/>
                   <circle cx="60" cy="40" r="3" fill="#8fa6b8"/>
@@ -818,10 +1120,13 @@
                     <circle cx="86" cy="40" r="5.5" fill="#ffd166"/>
                   </g>
                 </svg>
-                <p class="unit-label">Dynamics</p>
-              </div>
-              <div class="unit">
-                <svg viewBox="0 0 120 80" focusable="false">
+                <span class="unit-label">Dynamics</span>
+                <span class="unit-meta"></span>
+                <span class="unit-progress" aria-hidden="true"><span></span></span>
+                <span class="unit-keys"></span>
+              </button>
+              <button class="unit" type="button" data-unit="3">
+                <svg viewBox="0 0 120 80" focusable="false" aria-hidden="true">
                   <defs><marker id="u2-e8f4f8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#e8f4f8"/></marker></defs>
                   <line x1="4" y1="58" x2="116" y2="58" stroke="#8fa6b8" stroke-opacity=".6" stroke-width="1.5"/>
                   <g>
@@ -841,20 +1146,26 @@
                     </line>
                   </g>
                 </svg>
-                <p class="unit-label">Energy &amp; Momentum</p>
-              </div>
-              <div class="unit">
-                <svg viewBox="0 0 120 80" focusable="false">
+                <span class="unit-label">Energy &amp; Momentum</span>
+                <span class="unit-meta"></span>
+                <span class="unit-progress" aria-hidden="true"><span></span></span>
+                <span class="unit-keys"></span>
+              </button>
+              <button class="unit" type="button" data-unit="4">
+                <svg viewBox="0 0 120 80" focusable="false" aria-hidden="true">
                   <defs><marker id="u3-18b7d6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18b7d6"/></marker></defs>
                   <g stroke="#18b7d6" stroke-opacity=".6" stroke-width="1.5" marker-end="url(#u3-18b7d6)"><line x1="96.0" y1="40.0" x2="77.0" y2="40.0"/><line x1="85.5" y1="65.5" x2="72.0" y2="52.0"/><line x1="60.0" y1="76.0" x2="60.0" y2="57.0"/><line x1="34.5" y1="65.5" x2="48.0" y2="52.0"/><line x1="24.0" y1="40.0" x2="43.0" y2="40.0"/><line x1="34.5" y1="14.5" x2="48.0" y2="28.0"/><line x1="60.0" y1="4.0" x2="60.0" y2="23.0"/><line x1="85.5" y1="14.5" x2="72.0" y2="28.0"/></g>
                   <circle cx="60" cy="40" r="9" fill="#ff8a3d"/>
                   <path id="u3-orbit" d="M88 40A28 28 0 1 1 32 40A28 28 0 1 1 88 40" fill="none" stroke="#8fa6b8" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="3 5"/>
                   <circle r="4.5" fill="#ffd166"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#u3-orbit" xlink:href="#u3-orbit"/></animateMotion></circle>
                 </svg>
-                <p class="unit-label">Fields</p>
-              </div>
-              <div class="unit">
-                <svg viewBox="0 0 120 80" focusable="false">
+                <span class="unit-label">Fields</span>
+                <span class="unit-meta"></span>
+                <span class="unit-progress" aria-hidden="true"><span></span></span>
+                <span class="unit-keys"></span>
+              </button>
+              <button class="unit" type="button" data-unit="5">
+                <svg viewBox="0 0 120 80" focusable="false" aria-hidden="true">
                   <defs><clipPath id="u4-clip"><rect x="6" y="6" width="108" height="68"/></clipPath></defs>
                   <line x1="6" y1="40" x2="114" y2="40" stroke="#8fa6b8" stroke-opacity=".55" stroke-width="1.5"/>
                   <g clip-path="url(#u4-clip)">
@@ -863,8 +1174,11 @@
                     </path>
                   </g>
                 </svg>
-                <p class="unit-label">Waves &amp; Light</p>
-              </div>
+                <span class="unit-label">Waves &amp; Light</span>
+                <span class="unit-meta"></span>
+                <span class="unit-progress" aria-hidden="true"><span></span></span>
+                <span class="unit-keys"></span>
+              </button>
            </div>
           </div>
         </section>
@@ -895,11 +1209,12 @@
           <div class="formula-area">
             <div class="formula-actions">
               <a class="pdf-link download-link" href="images/sph4u-formula-sheet.png" download>Download formula sheet</a>
-              <a class="pdf-link" href="images/sph4u-formula-sheet.png" target="_blank" rel="noopener noreferrer">Open full image <span aria-hidden="true">↗</span></a>
+              <a class="pdf-link view-link" href="view/?file=formula-sheet&amp;title=SPH4U%20Formula%20Sheet" target="_blank" rel="noopener">Open full image <span aria-hidden="true">↗</span></a>
             </div>
-            <div class="formula-sheet-scroll" role="region" aria-label="Formula sheet image; scroll sideways to see all columns" tabindex="0">
+            <a class="formula-sheet-link view-link" href="view/?file=formula-sheet&amp;title=SPH4U%20Formula%20Sheet" target="_blank" rel="noopener" aria-label="Open the formula sheet in the zoomable viewer">
               <img class="formula-sheet-image" src="images/sph4u-formula-sheet.png" alt="SPH4U physics formula sheet with equations for kinematics, dynamics, energy, collisions, fields, waves, and relativity" width="1870" height="2420" loading="lazy">
-            </div>
+            </a>
+            <p class="formula-hint">Tap or click the sheet to open it in a viewer where you can zoom in.</p>
           </div>
         </section>
       </div>
@@ -911,38 +1226,11 @@
     <p class="privacy-note">This site counts visits, clicks and downloads to see which solutions are used. It doesn't collect your name, email or account details.</p>
   </footer>
 
+  <script src="lessons.js"></script>
   <script>
-    const lessons = [
-      { id: '1-0', number: '1.0', title: 'Vectors' },
-      { id: '1-1', number: '1.1', title: 'Kinematics Vectors' },
-      { id: '1-2', number: '1.2', title: 'Chase Collision' },
-      { id: '1-3a', number: '1.3a', title: 'Relative Motion' },
-      { id: '1-3b', number: '1.3b', title: 'Relative Motion Day 2' },
-      { id: '1-4', number: '1.4', title: 'Acceleration Due to Gravity' },
-      { id: '1-5a', number: '1.5a', title: 'Projectile Motion' },
-      { id: '1-6', number: '1.6', title: '2D Acceleration' },
-      { id: '1-8-problem-solving', number: '1.8', title: 'Kinematics Problem Solving' },
-      { id: '1-8-review', number: '1.8', title: 'Problem Solving Review' },
-      { id: '1-8b', number: '1.8b', title: 'Review Extended' },
-      { id: '1-9a', number: '1.9a', title: 'Frames of Reference and Relativity' },
-      { id: '1-9b', number: '1.9b', title: 'Length Contraction and Relative Velocities' },
-      {"id": "2-0", "number": "2.0", "title": "Newton's Laws of Motion"},
-      {"id": "2-1", "number": "2.1", "title": "Equilibrium"},
-      {"id": "2-1b", "number": "2.1b", "title": "Force Table"},
-      {"id": "2-2", "number": "2.2", "title": "Inclined Planes"},
-      {"id": "2-3", "number": "2.3", "title": "Friction, Angled Forces and Tension"},
-      {"id": "2-4", "number": "2.4", "title": "Pulleys and Strings"},
-      {"id": "2-5", "number": "2.5", "title": "Complex Systems"},
-      {"id": "2-5b", "number": "2.5b", "title": "Problem Solving"},
-      {"id": "2-6", "number": "2.6", "title": "Apparent Motion"},
-      {"id": "2-7", "number": "2.7", "title": "Circular Motion"},
-      {"id": "2-8", "number": "2.8", "title": "Forces Analysis in Uniform Circular Motion"},
-      {"id": "2-9b", "number": "2.9b", "title": "Problem Solving"},
-      {"id": "2-10", "number": "2.10", "title": "Gravitation and Satellites"},
-      {"id": "2-11", "number": "2.11", "title": "Dark Matter"},
-      {"id": "2-12", "number": "2.12", "title": "Artificial Gravity"},
-      {"id": "2-14", "number": "2.14", "title": "Review Questions from Text"}
-    ];
+    const lessons = window.SITE_LESSONS;
+    const unitNames = window.SITE_UNITS;
+    const unitOf = lesson => lesson.id.split('-')[0];
 
     const unitGroups = document.querySelector('#unit-groups');
     const lessonContent = document.querySelector('#lesson-content');
@@ -960,19 +1248,19 @@
       const viewerHref = `view/?file=lesson-${lesson.id}-${format}&title=${encodeURIComponent(`${lesson.number} ${lesson.title}`)}`;
 
       return `
-        <article class="resource-card ${format}" data-pdf="${file}">
+        <article class="resource-card ${format}" data-pdf="${file}" data-lesson="${lesson.id}" data-format="${format}">
           <div class="card-top">
             <span class="card-icon" aria-hidden="true">${handwritten ? pencilIcon : screenIcon}</span>
             <span class="format-tag">${handwritten ? 'Original working' : 'Polished version'}</span>
+            <span class="availability">Coming soon</span>
           </div>
           <h3>${label}</h3>
           <p>${description}</p>
           ${handwritten && lesson.id === '1-2' ? '<p class="resource-warning">Some practice questions may be missing from the handwritten solutions. You can find them in the digital copy.</p>' : ''}
           ${handwritten && lesson.id === '1-3b' ? '<p class="resource-warning">Not all practice problems are included in the handwritten solution. You can find the remaining problems in the digital copy.</p>' : ''}
-          <div class="resource-bottom">
-            <span class="availability">Coming soon</span>
-            <a class="pdf-link view-link" href="${viewerHref}" target="_blank" rel="noopener" hidden>View PDF <span aria-hidden="true">↗</span></a>
-            <a class="pdf-link download-link" href="${file}" download hidden>Download PDF</a>
+          <div class="resource-actions" hidden>
+            <a class="pdf-link view-link" href="${viewerHref}" target="_blank" rel="noopener">View PDF <span aria-hidden="true">↗</span></a>
+            <a class="pdf-link download-link" href="${file}" download>Download PDF</a>
           </div>
           <div class="pdf-preview-wrap" hidden>
             <p class="preview-label">Scrollable PDF preview</p>
@@ -984,32 +1272,47 @@
         </article>`;
     }
 
+    // Previous/Next buttons at the bottom of a lesson; an empty cell keeps "Next" on the right.
+    function pagerButton(lesson, direction) {
+      if (!lesson) return '<span aria-hidden="true"></span>';
+      return `
+              <button class="pager-link ${direction}" type="button" data-go="${lesson.id}" data-nav="${direction}">
+                <span class="pager-dir">${direction === 'prev' ? '← Previous' : 'Next →'}</span>
+                <span class="pager-name">${lesson.number} ${lesson.title}</span>
+              </button>`;
+    }
+
     // Each unit gets one collapsible group; future units use the same layout.
-    const unitNumbers = [...new Set(lessons.map(lesson => lesson.id.split('-')[0]))];
+    const unitNumbers = [...new Set(lessons.map(unitOf))];
+    const lessonsInUnit = unit => lessons.filter(lesson => unitOf(lesson) === unit);
     for (const unit of unitNumbers) {
-      const count = lessons.filter(lesson => lesson.id.split('-')[0] === unit).length;
+      const count = lessonsInUnit(unit).length;
       unitGroups.insertAdjacentHTML('beforeend', `
-        <details class="unit-group" id="unit-${unit}-menu">
+        <details class="unit-group" id="unit-${unit}-menu" data-unit="${unit}">
           <summary class="unit-summary" id="unit-${unit}-toggle">
             <span>Unit ${unit}</span>
-            <span class="unit-count">${count} lessons</span>
+            <span class="new-dot" hidden></span>
+            <span class="unit-count" id="unit-${unit}-count">${count} lessons</span>
             <svg class="unit-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="tab-list" id="unit-${unit}-tabs" role="tablist" aria-label="Unit ${unit} lessons" aria-orientation="vertical"></div>
         </details>`);
     }
 
-    for (const lesson of lessons) {
-      const unitTabs = document.querySelector(`#unit-${lesson.id.split('-')[0]}-tabs`);
-      unitTabs.insertAdjacentHTML('beforeend', `
-        <button class="lesson-tab" type="button" role="tab" id="tab-${lesson.id}" aria-controls="panel-${lesson.id}" aria-selected="false" tabindex="-1" data-panel="${lesson.id}">
+    lessons.forEach((lesson, index) => {
+      const unit = unitOf(lesson);
+      const search = `${lesson.number} ${lesson.title} unit ${unit} ${unitNames[unit] || ''}`.toLowerCase();
+      document.querySelector(`#unit-${unit}-tabs`).insertAdjacentHTML('beforeend', `
+        <button class="lesson-tab" type="button" role="tab" id="tab-${lesson.id}" aria-controls="panel-${lesson.id}" aria-selected="false" tabindex="-1" data-panel="${lesson.id}" data-unit="${unit}" data-search="${search}">
           <span class="tab-code">${lesson.number}</span>
           <span class="tab-title">${lesson.title}</span>
+          <span class="tab-keys" aria-hidden="true"></span>
+          <span class="visually-hidden tab-status"></span>
           <span class="tab-arrow" aria-hidden="true">→</span>
         </button>`);
 
       lessonContent.insertAdjacentHTML('beforeend', `
-        <section class="content-panel" id="panel-${lesson.id}" role="tabpanel" aria-labelledby="tab-${lesson.id}" tabindex="0" hidden>
+        <section class="content-panel" id="panel-${lesson.id}" role="tabpanel" aria-labelledby="tab-${lesson.id}" tabindex="0" data-unit="${unit}" hidden>
           <div class="panel-heading">
             <p class="lesson-kicker">Mr. Kassil's SPH4U lessons</p>
             <h2><span class="lesson-number">${lesson.number}</span> ${lesson.title}</h2>
@@ -1022,29 +1325,55 @@
               ${resourceCard(lesson, 'digital')}
             </div>
             <p class="textbook-note"><strong>Note:</strong> Textbook problems are not included in these solutions.</p>
+            <nav class="lesson-pager" aria-label="More lessons">
+              ${pagerButton(lessons[index - 1], 'prev')}
+              ${pagerButton(lessons[index + 1], 'next')}
+            </nav>
           </div>
         </section>`);
-    }
+    });
 
     const tabs = Array.from(document.querySelectorAll('.lesson-tab'));
     const panels = Array.from(document.querySelectorAll('.content-panel'));
+    for (const tab of tabs) {
+      if (!tab.dataset.search) tab.dataset.search = tab.querySelector('.tab-title').textContent.toLowerCase();
+    }
 
     function updateTabStops() {
       for (const list of document.querySelectorAll('[role="tablist"]')) {
-        const groupTabs = Array.from(list.querySelectorAll('.lesson-tab'));
+        const groupTabs = Array.from(list.querySelectorAll('.lesson-tab:not([hidden])'));
         const focusTab = groupTabs.find(tab => tab.getAttribute('aria-selected') === 'true') || groupTabs[0];
         for (const tab of groupTabs) tab.tabIndex = tab === focusTab ? 0 : -1;
       }
     }
 
+    // Phones and narrow windows show one "Lessons" button that opens the full list.
     const navigationMedia = window.matchMedia('(max-width: 920px)');
-    function updateNavigationOrientation() {
-      for (const list of document.querySelectorAll('[role="tablist"]')) {
-        list.setAttribute('aria-orientation', navigationMedia.matches ? 'horizontal' : 'vertical');
-      }
+    const lessonNav = document.querySelector('#lesson-nav');
+    const navToggle = document.querySelector('#nav-toggle');
+    const navCurrent = document.querySelector('#nav-current');
+    function setNavOpen(open) {
+      lessonNav.classList.toggle('is-open', open);
+      navToggle.setAttribute('aria-expanded', String(open));
     }
-    updateNavigationOrientation();
-    if (navigationMedia.addEventListener) navigationMedia.addEventListener('change', updateNavigationOrientation);
+    navToggle.addEventListener('click', () => setNavOpen(!lessonNav.classList.contains('is-open')));
+    lessonNav.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || !navigationMedia.matches || !lessonNav.classList.contains('is-open')) return;
+      setNavOpen(false);
+      navToggle.focus();
+    });
+
+    // Brings the chosen page into view: the menu bar on phones, the panel on wider screens.
+    function scrollToContent(always = false) {
+      const target = navigationMedia.matches ? lessonNav : lessonContent;
+      if (always || target.getBoundingClientRect().top < 0) target.scrollIntoView({ block: 'start' });
+    }
+
+    function tabLabel(tab) {
+      const lesson = lessons.find(item => item.id === tab.dataset.panel);
+      return lesson ? `${lesson.number} ${lesson.title}` : tab.querySelector('.tab-title').textContent;
+    }
+    const homeTitle = document.title;
 
     function selectPanel(id, moveFocus = false) {
       const selected = tabs.find(tab => tab.dataset.panel === id) || tabs[0];
@@ -1058,6 +1387,10 @@
       for (const panel of panels) {
         panel.hidden = panel.id !== `panel-${selected.dataset.panel}`;
       }
+      document.body.dataset.panel = selected.dataset.panel;
+      document.title = selected.dataset.panel === 'home' ? homeTitle : `${tabLabel(selected)} · karolsolveskassil.ca`;
+      navCurrent.textContent = tabLabel(selected);
+      markSeen(selected.dataset.panel);
       if (moveFocus) selected.focus();
       recordView(selected.dataset.panel);
       if (location.hash !== `#${selected.dataset.panel}`) {
@@ -1164,6 +1497,9 @@
     // "download-pdf:1-0:digital". Labels never include page text or user data.
     function engagementTarget(control) {
       if (control.dataset.panel) return `tab:${control.dataset.panel}`;
+      // Previous/Next buttons and What's new links, e.g. "next:2-1" or "whats-new:1-8b".
+      if (control.dataset.go) return `${control.dataset.nav}:${control.dataset.go}`;
+      if (control.matches('button.unit')) return `unit-card:${control.dataset.unit}`;
       if (control.id === 'copy-email') return 'copy-email';
       const card = control.closest('[data-pdf]');
       const match = card?.dataset.pdf.match(/lesson-([a-z0-9-]+)-(digital|handwritten)\.pdf$/);
@@ -1250,12 +1586,260 @@
       document.addEventListener(type, linkViewerToVisit, true);
     }
 
+    // ----- Posted answer keys -----
+    // pdfs/posted.json lists every posted PDF and the day it was added, so the page
+    // asks the server once instead of checking every possible PDF.
+    let posted = null;
+    let newLessons = new Set();
+    const isPosted = (id, format) => Boolean(posted?.[id]?.[format]);
+    const postedCount = unitLessons => unitLessons.reduce((sum, lesson) =>
+      sum + isPosted(lesson.id, 'handwritten') + isPosted(lesson.id, 'digital'), 0);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    function shortDate(date) {
+      const [, month, day] = date.split('-').map(Number);
+      return `${months[month - 1]} ${day}`;
+    }
+
+    function markAvailable(card) {
+      const status = card.querySelector('.availability');
+      status.textContent = 'Available';
+      status.classList.add('available');
+      card.classList.add('is-available');
+      card.querySelector('.resource-actions').hidden = false;
+      card.querySelector('.pdf-preview-wrap').hidden = false;
+    }
+
+    // Screen readers hear what the H/D badges and the "new" dot show.
+    function updateTabStatus(tab) {
+      const notes = [tab.dataset.posted, tab.classList.contains('is-new') && 'new'].filter(Boolean);
+      tab.querySelector('.tab-status').textContent = notes.map(note => `, ${note}`).join('');
+    }
+
+    // H and D badges on each lesson, and "6 of 32 posted" on each unit.
+    function showMenuBadges() {
+      for (const lesson of lessons) {
+        const tab = document.querySelector(`#tab-${lesson.id}`);
+        const handwritten = isPosted(lesson.id, 'handwritten');
+        const digital = isPosted(lesson.id, 'digital');
+        const keys = tab.querySelector('.tab-keys');
+        keys.innerHTML = `<span class="key-chip ${handwritten ? 'on' : 'off'}">H</span><span class="key-chip ${digital ? 'on' : 'off'}">D</span>`;
+        keys.title = `Handwritten: ${handwritten ? 'posted' : 'not yet'} · Digital: ${digital ? 'posted' : 'not yet'}`;
+        tab.dataset.posted = handwritten && digital ? 'handwritten and digital posted'
+          : handwritten ? 'handwritten posted' : digital ? 'digital posted' : 'not posted yet';
+        updateTabStatus(tab);
+      }
+      for (const unit of unitNumbers) {
+        const unitLessons = lessonsInUnit(unit);
+        document.querySelector(`#unit-${unit}-count`).textContent =
+          `${postedCount(unitLessons)} of ${unitLessons.length * 2} posted`;
+      }
+    }
+
+    // Unit cards on the home page open that unit in the lesson menu.
+    function openUnit(unit) {
+      const group = document.querySelector(`#unit-${unit}-menu`);
+      if (!group) return;
+      if (searchInput.value) clearSearch();
+      group.open = true;
+      if (navigationMedia.matches) setNavOpen(true);
+      group.scrollIntoView({ block: navigationMedia.matches ? 'start' : 'nearest' });
+      group.classList.add('flash');
+      setTimeout(() => group.classList.remove('flash'), 1600);
+      group.querySelector('.lesson-tab')?.focus({ preventScroll: true });
+    }
+    const unitCards = Array.from(document.querySelectorAll('button.unit'));
+    for (const card of unitCards) {
+      const unit = card.dataset.unit;
+      const count = lessonsInUnit(unit).length;
+      card.querySelector('.unit-meta').textContent = count ? `Unit ${unit} · ${count} lessons` : `Unit ${unit} · Coming later`;
+      if (!count) {
+        card.disabled = true;
+        card.querySelector('.unit-progress').hidden = true;
+        card.querySelector('.unit-keys').hidden = true;
+      }
+      card.addEventListener('click', () => openUnit(unit));
+    }
+    function showUnitProgress() {
+      for (const card of unitCards) {
+        const unitLessons = lessonsInUnit(card.dataset.unit);
+        if (!unitLessons.length) continue;
+        const done = postedCount(unitLessons);
+        const total = unitLessons.length * 2;
+        card.querySelector('.unit-progress span').style.width = `${Math.round(done / total * 100)}%`;
+        card.querySelector('.unit-keys').textContent = `${done} of ${total} keys posted`;
+      }
+    }
+
+    // What's new: the five latest additions, newest first.
+    function showWhatsNew() {
+      const entries = [];
+      lessons.forEach((lesson, index) => {
+        const byDate = {};
+        for (const format of ['handwritten', 'digital']) {
+          const date = posted[lesson.id]?.[format];
+          if (date) (byDate[date] ??= []).push(format);
+        }
+        for (const [date, formats] of Object.entries(byDate)) entries.push({ lesson, index, date, formats });
+      });
+      entries.sort((a, b) => b.date.localeCompare(a.date) || b.index - a.index);
+      document.querySelector('#whats-new-list').innerHTML = entries.slice(0, 5).map(({ lesson, date, formats }) => {
+        const kind = formats.length === 2 ? 'Handwritten &amp; digital' : formats[0] === 'handwritten' ? 'Handwritten' : 'Digital';
+        return `<li><a href="#${lesson.id}" data-nav="whats-new" data-go="${lesson.id}">${lesson.number} ${lesson.title} · ${kind} · ${shortDate(date)}</a></li>`;
+      }).join('');
+      document.querySelector('#whats-new').hidden = !entries.length;
+    }
+    document.querySelector('#whats-new-list').addEventListener('click', event => {
+      const link = event.target.closest('a[data-go]');
+      if (!link || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      event.preventDefault();
+      selectPanel(link.dataset.go);
+      scrollToContent(true);
+    });
+
+    // "New" dots: keys added since this browser's last visit. The list of keys already
+    // seen stays in this browser only; nothing about it is sent anywhere.
+    const seenKey = 'postedKeysSeen';
+    const newKey = 'postedKeysNew';
+    function findNewKeys() {
+      const current = Object.entries(posted)
+        .flatMap(([id, formats]) => Object.keys(formats).map(format => `${id}:${format}`));
+      try {
+        const thisVisit = sessionStorage.getItem(newKey);
+        if (thisVisit !== null) return JSON.parse(thisVisit);
+        const seen = localStorage.getItem(seenKey);
+        const seenKeys = new Set(seen === null ? current : JSON.parse(seen)); // First visit: nothing is new.
+        const fresh = current.filter(key => !seenKeys.has(key));
+        sessionStorage.setItem(newKey, JSON.stringify(fresh));
+        localStorage.setItem(seenKey, JSON.stringify(current));
+        return fresh;
+      } catch {
+        return [];
+      }
+    }
+    function showNewDots() {
+      for (const tab of tabs) {
+        if (!tab.dataset.unit) continue;
+        tab.classList.toggle('is-new', newLessons.has(tab.dataset.panel));
+        updateTabStatus(tab);
+      }
+      for (const group of document.querySelectorAll('.unit-group')) {
+        group.querySelector('.new-dot').hidden = !group.querySelector('.lesson-tab.is-new');
+      }
+      document.querySelector('#nav-new-dot').hidden = !newLessons.size;
+    }
+    // Opening a lesson clears its dot for the rest of the visit.
+    function markSeen(id) {
+      if (!newLessons.delete(id)) return;
+      try {
+        const fresh = JSON.parse(sessionStorage.getItem(newKey) || '[]').filter(key => key.split(':')[0] !== id);
+        sessionStorage.setItem(newKey, JSON.stringify(fresh));
+      } catch { /* The dot comes back on reload instead. */ }
+      showNewDots();
+    }
+
+    function applyPosted(list) {
+      posted = list;
+      for (const card of document.querySelectorAll('[data-pdf]')) {
+        if (isPosted(card.dataset.lesson, card.dataset.format)) markAvailable(card);
+      }
+      showMenuBadges();
+      showUnitProgress();
+      showWhatsNew();
+      newLessons = new Set(findNewKeys().map(key => key.split(':')[0]));
+      markSeen(document.body.dataset.panel);
+      showNewDots();
+    }
+    // If the list can't be loaded, ask about each PDF instead, as the site used to.
+    function checkEachPdf() {
+      for (const card of unitCards) card.querySelector('.unit-progress').hidden = true;
+      for (const card of document.querySelectorAll('[data-pdf]')) {
+        fetch(card.dataset.pdf, { method: 'HEAD', cache: 'no-store' })
+          .then(response => {
+            // Pages can return the HTML fallback for a missing file.
+            // Only mark a resource available when the response is a PDF.
+            const contentType = response.headers.get('content-type') || '';
+            if (response.ok && /^application\/pdf(?:;|$)/i.test(contentType)) markAvailable(card);
+          })
+          .catch(() => { /* Missing PDFs stay marked Coming soon. */ });
+      }
+    }
+    if (location.protocol !== 'file:') {
+      fetch('pdfs/posted.json', { cache: 'no-cache' })
+        .then(response => (response.ok ? response.json() : Promise.reject(new Error('No list'))))
+        .then(list => (list && typeof list === 'object' ? applyPosted(list) : checkEachPdf()), checkEachPdf);
+    }
+
+    // ----- Search -----
+    const searchInput = document.querySelector('#lesson-search');
+    const searchEmpty = document.querySelector('#search-empty');
+    const unitGroupList = Array.from(document.querySelectorAll('.unit-group'));
+    let openBeforeSearch = null;
+    function runSearch() {
+      const words = searchInput.value.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!words.length) {
+        clearSearch();
+        return;
+      }
+      openBeforeSearch ??= unitGroupList.map(group => group.open);
+      let matches = 0;
+      for (const tab of tabs) {
+        tab.hidden = !words.every(word => tab.dataset.search.includes(word));
+        if (!tab.hidden) matches++;
+      }
+      for (const group of unitGroupList) {
+        const any = Boolean(group.querySelector('.lesson-tab:not([hidden])'));
+        group.hidden = !any;
+        if (any) group.open = true;
+      }
+      searchEmpty.textContent = `No lessons match “${searchInput.value.trim()}”.`;
+      searchEmpty.hidden = matches > 0;
+      updateTabStops();
+    }
+    function clearSearch() {
+      searchInput.value = '';
+      for (const tab of tabs) tab.hidden = false;
+      unitGroupList.forEach((group, index) => {
+        group.hidden = false;
+        if (openBeforeSearch) group.open = openBeforeSearch[index];
+      });
+      openBeforeSearch = null;
+      searchEmpty.hidden = true;
+      const current = tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+      const currentUnit = current?.closest('.unit-group');
+      if (currentUnit) currentUnit.open = true;
+      updateTabStops();
+    }
+    searchInput.addEventListener('input', runSearch);
+    searchInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        tabs.find(tab => !tab.hidden)?.click();
+      } else if (event.key === 'Escape' && searchInput.value) {
+        event.stopPropagation();
+        clearSearch();
+      }
+    });
+
+    // Previous/Next buttons at the bottom of each lesson.
+    lessonContent.addEventListener('click', event => {
+      const button = event.target.closest('.pager-link');
+      if (!button) return;
+      selectPanel(button.dataset.go);
+      scrollToContent(true);
+    });
+
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         selectPanel(tab.dataset.panel);
+        // On phones, close the list after a choice so the lesson shows straight away.
+        if (navigationMedia.matches && lessonNav.classList.contains('is-open')) {
+          if (searchInput.value) clearSearch();
+          setNavOpen(false);
+          scrollToContent(true);
+        }
       });
       tab.addEventListener('keydown', event => {
-        const groupTabs = Array.from(tab.closest('[role="tablist"]').querySelectorAll('.lesson-tab'));
+        const groupTabs = Array.from(tab.closest('[role="tablist"]').querySelectorAll('.lesson-tab:not([hidden])'));
         const index = groupTabs.indexOf(tab);
         const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (index + 1) % groupTabs.length
           : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (index - 1 + groupTabs.length) % groupTabs.length
@@ -1293,28 +1877,6 @@
         help.textContent = 'Copying is unavailable here. Select the email address above and copy it manually.';
       }
     });
-
-    if (location.protocol !== 'file:') {
-      for (const card of document.querySelectorAll('[data-pdf]')) {
-        const link = card.querySelector('.pdf-link');
-        const status = card.querySelector('.availability');
-        const previewWrap = card.querySelector('.pdf-preview-wrap');
-        fetch(card.dataset.pdf, { method: 'HEAD', cache: 'no-store' })
-          .then(response => {
-            // Pages can return the HTML fallback for a missing file.
-            // Only mark a resource available when the response is a PDF.
-            const contentType = response.headers.get('content-type') || '';
-            if (!response.ok || !/^application\/pdf(?:;|$)/i.test(contentType)) return;
-            link.hidden = false;
-            card.querySelector('.download-link').hidden = false;
-            status.textContent = 'Available now';
-            status.classList.add('available');
-            card.classList.add('is-available');
-            previewWrap.hidden = false;
-          })
-          .catch(() => { /* Missing PDFs stay marked Coming soon. */ });
-      }
-    }
 
   </script>
   <script>
