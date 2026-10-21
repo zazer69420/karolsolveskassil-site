@@ -53,6 +53,13 @@ Lesson 1.9b — Length Contraction and Relative Velocities
   lesson-1-9b-handwritten.pdf
   lesson-1-9b-digital.pdf
 
-After adding or replacing PDFs, upload the complete site folder to the existing
-Cloudflare Pages project as a new production deployment. The matching button
-appears automatically once its PDF is published.
+Unit 2 and later lessons follow the same pattern:
+  lesson-<id>-handwritten.pdf and lesson-<id>-digital.pdf, where <id> is the
+  lesson's "id" in the lessons list in index.html (for example 2-1b).
+
+The site is published by Cloudflare Workers Builds, which is connected to this
+GitHub repository. After adding or replacing PDFs, get the change onto the
+main branch (commit to main, or merge a pull request into main). Cloudflare
+then builds and publishes the site automatically; no manual upload is needed.
+Changes on any other branch do not go live. The matching button appears
+automatically once its PDF is published.
