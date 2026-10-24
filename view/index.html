@@ -452,13 +452,21 @@
         cache: 'no-store'
       });
     }
+    // "phone", "tablet" or "computer" for the stats page's device split. Worked out
+    // from the screen size and whether the main pointer is touch, not the user agent.
+    function deviceType() {
+      try {
+        if (!matchMedia('(pointer: coarse)').matches) return 'computer';
+        return Math.min(screen.width, screen.height) < 600 ? 'phone' : 'tablet';
+      } catch { return ''; }
+    }
     async function sendPresence(visible) {
       if (location.protocol === 'file:') return;
       try {
         if (trackingOff()) return;
         await postEvent('presence', {
           visitId: visitIdForTab(), browserId: browserIdForVisits(), visible,
-          ...(visible ? { source: visitSource() } : {})
+          ...(visible ? { source: visitSource(), device: deviceType() } : {})
         }, !visible);
       } catch { /* Reading still works if analytics fails. */ }
     }
@@ -480,24 +488,78 @@
       const how = link.closest('#format-switch') ? 'switch' : link.classList.contains('prev') ? 'prev' : 'next';
       try { sessionStorage.setItem(openedByKey, how); } catch { /* Counted as a direct open instead. */ }
     });
+    const navigation = performance.getEntriesByType?.('navigation')[0];
+    const reopened = Boolean(navigation && (navigation.type === 'reload' || navigation.type === 'back_forward'));
+    // One ID per opened solution. A refresh keeps it (and its reading time) instead of starting over.
+    const openKey = `viewerOpen:${fileName}`;
+    let openState = null;
+    try { if (reopened) openState = JSON.parse(sessionStorage.getItem(openKey) || 'null'); }
+    catch { /* Start a new open. */ }
+    if (!openState || typeof openState.id !== 'string' || !uuidPattern.test(openState.id)) {
+      openState = { id: '', seconds: 0 };
+      try { openState.id = crypto.randomUUID(); } catch { /* No tracking without an ID. */ }
+    }
+    const openId = openState.id;
     (() => {
       let how = passedVisit && uuidPattern.test(passedVisit) ? 'site' : 'direct';
       try {
         how = sessionStorage.getItem(openedByKey) || how;
         sessionStorage.removeItem(openedByKey);
       } catch { /* Keep the guess above. */ }
-      const navigation = performance.getEntriesByType?.('navigation')[0];
-      if (navigation && (navigation.type === 'reload' || navigation.type === 'back_forward')) return;
-      if (location.protocol === 'file:' || !(lessonId || isFormulaSheet)) return;
+      if (reopened) return;
+      if (location.protocol === 'file:' || !(lessonId || isFormulaSheet) || !openId) return;
       try {
         if (trackingOff()) return;
         postEvent('pdf', {
-          openId: crypto.randomUUID(), visitId: visitIdForTab(),
+          openId, visitId: visitIdForTab(),
           lessonId: isFormulaSheet ? 'formula-sheet' : lessonId,
           format: isFormulaSheet ? 'sheet' : format, how
         }, true).catch(() => {});
       } catch { /* Reading still works if analytics fails. */ }
     })();
+
+    // ----- Reading time and how far the solution was read -----
+    // Time counts while the viewer is visible and someone scrolled, tapped or pressed a
+    // key in the last 2 minutes, so a tab left open doesn't keep adding time.
+    // The page-drawing script below fills in readDepth: the furthest page reached and the page count.
+    const readDepth = window.viewerReadDepth = { page: 0, pages: 0 };
+    const IDLE_MS = 2 * 60 * 1000;
+    let readSeconds = Math.max(0, Number(openState.seconds) || 0);
+    let lastActive = Date.now();
+    let lastTick = Date.now();
+    let lastSent = '';
+    for (const type of ['scroll', 'wheel', 'pointerdown', 'keydown', 'touchstart']) {
+      addEventListener(type, () => { lastActive = Date.now(); }, { capture: true, passive: true });
+    }
+    setInterval(() => {
+      const now = Date.now();
+      if (document.visibilityState === 'visible' && now - lastActive < IDLE_MS) {
+        readSeconds += Math.min(now - lastTick, 5000) / 1000; // Ignore gaps such as a sleeping laptop.
+      }
+      lastTick = now;
+    }, 1000);
+    document.addEventListener('visibilitychange', () => { lastTick = Date.now(); });
+    function sendReading(leaving) {
+      if (location.protocol === 'file:' || !(lessonId || isFormulaSheet) || !openId || !readDepth.pages) return;
+      const seconds = Math.min(Math.round(readSeconds), 14400);
+      try { sessionStorage.setItem(openKey, JSON.stringify({ id: openId, seconds })); }
+      catch { /* A refresh starts its time from zero instead. */ }
+      const report = `${seconds}:${readDepth.page}`;
+      if (seconds < 1 || report === lastSent) return;
+      try {
+        if (trackingOff()) return;
+        lastSent = report;
+        postEvent('reading', {
+          openId, visitId: visitIdForTab(),
+          lessonId: isFormulaSheet ? 'formula-sheet' : lessonId,
+          format: isFormulaSheet ? 'sheet' : format,
+          seconds, page: Math.min(readDepth.page, readDepth.pages), pages: readDepth.pages
+        }, leaving).catch(() => {});
+      } catch { /* Reading still works if analytics fails. */ }
+    }
+    setInterval(() => { if (document.visibilityState === 'visible') sendReading(false); }, 30000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') sendReading(true); });
+    addEventListener('pagehide', () => sendReading(true));
 
     // Only the Download button counts as an engagement here; zooming and the back link don't.
     document.getElementById('download-link').addEventListener('click', () => {
@@ -658,11 +720,21 @@
       try { localStorage.setItem(positionKey, JSON.stringify(currentPosition())); }
       catch { /* Reading still works; the place just isn't remembered. */ }
     }
+    // Furthest page reached, for the reading stats. The bottom of the document counts
+    // as the last page, since a short last page may never reach the reading line.
+    function noteDepth() {
+      const depth = window.viewerReadDepth;
+      if (!depth || !pages.length) return;
+      const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 8;
+      depth.pages = pages.length;
+      depth.page = Math.max(depth.page, atEnd ? pages.length : currentPosition().page);
+    }
     let frame = 0;
     addEventListener('scroll', () => {
       if (!tracking || frame) return;
       frame = requestAnimationFrame(() => {
         frame = 0;
+        noteDepth();
         if (document.activeElement !== pageInput) pageInput.value = String(currentPosition().page);
         if (!resumeNote.hidden && Math.abs(scrollY - resumeScrollY) > 300) hideResumeNote();
         clearTimeout(saveTimer);
@@ -692,6 +764,7 @@
       }
       pageInput.value = String(currentPosition().page);
       tracking = true;
+      noteDepth();
     }
 
     function showImage() {
@@ -708,6 +781,8 @@
       pagesEl.append(element);
       status.hidden = true;
       zoomOut.disabled = zoom <= ZOOMS[0];
+      const depth = window.viewerReadDepth;
+      if (depth) depth.page = depth.pages = 1;
     }
 
     async function load() {

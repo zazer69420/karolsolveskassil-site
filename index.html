@@ -1000,7 +1000,7 @@
     <div class="header-inner">
       <p class="handwritten-notice"><strong>New · Unit 2 added / Answer keys are being worked on and posted</strong></p>
       <p class="site-name"><img class="site-logo" src="favicon.svg" alt="" width="64" height="64"><span>karolsolveskassil<span class="dot">.</span>ca</span></p>
-      <p class="update-note"><strong>Last updated · Oct 23, 2026 at 10:26 PM EDT</strong></p>
+      <p class="update-note"><strong>Last updated · Oct 24, 2026 at 12:00 AM EDT</strong></p>
     </div>
   </header>
 
@@ -1472,6 +1472,14 @@
       }
       return id;
     }
+    // "phone", "tablet" or "computer" for the stats page's device split. Worked out
+    // from the screen size and whether the main pointer is touch, not the user agent.
+    function deviceType() {
+      try {
+        if (!matchMedia('(pointer: coarse)').matches) return 'computer';
+        return Math.min(screen.width, screen.height) < 600 ? 'phone' : 'tablet';
+      } catch { return ''; }
+    }
     async function sendPresence(visible) {
       if (location.protocol === 'file:') return;
       try {
@@ -1481,7 +1489,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             visitId: visitIdForTab(), browserId: browserIdForVisits(), visible,
-            ...(visible ? { source: visitSource() } : {})
+            ...(visible ? { source: visitSource(), device: deviceType() } : {})
           }),
           keepalive: !visible,
           cache: 'no-store'
