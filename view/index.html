@@ -469,6 +469,36 @@
     document.addEventListener('visibilitychange', () => sendPresence(document.visibilityState === 'visible'));
     window.addEventListener('pagehide', () => sendPresence(false));
 
+    // Record each solution the viewer opens, and how it was reached, so PDF views
+    // include ones opened with the Handwritten/Digital switch or Previous/Next here.
+    // Refreshing the page or going back to it doesn't count again.
+    const openedByKey = 'viewerOpenedBy';
+    document.addEventListener('click', event => {
+      if (!(event.target instanceof Element)) return;
+      const link = event.target.closest('#format-switch a[href], #viewer-pager a[href]');
+      if (!link || !new URL(link.href, location.href).pathname.startsWith('/view/')) return;
+      const how = link.closest('#format-switch') ? 'switch' : link.classList.contains('prev') ? 'prev' : 'next';
+      try { sessionStorage.setItem(openedByKey, how); } catch { /* Counted as a direct open instead. */ }
+    });
+    (() => {
+      let how = passedVisit && uuidPattern.test(passedVisit) ? 'site' : 'direct';
+      try {
+        how = sessionStorage.getItem(openedByKey) || how;
+        sessionStorage.removeItem(openedByKey);
+      } catch { /* Keep the guess above. */ }
+      const navigation = performance.getEntriesByType?.('navigation')[0];
+      if (navigation && (navigation.type === 'reload' || navigation.type === 'back_forward')) return;
+      if (location.protocol === 'file:' || !(lessonId || isFormulaSheet)) return;
+      try {
+        if (trackingOff()) return;
+        postEvent('pdf', {
+          openId: crypto.randomUUID(), visitId: visitIdForTab(),
+          lessonId: isFormulaSheet ? 'formula-sheet' : lessonId,
+          format: isFormulaSheet ? 'sheet' : format, how
+        }, true).catch(() => {});
+      } catch { /* Reading still works if analytics fails. */ }
+    })();
+
     // Only the Download button counts as an engagement here; zooming and the back link don't.
     document.getElementById('download-link').addEventListener('click', () => {
       if (location.protocol === 'file:' || !downloadPath) return;
