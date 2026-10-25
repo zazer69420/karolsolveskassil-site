@@ -1000,7 +1000,7 @@
     <div class="header-inner">
       <p class="handwritten-notice"><strong>New · Unit 2 added / Answer keys are being worked on and posted</strong></p>
       <p class="site-name"><img class="site-logo" src="favicon.svg" alt="" width="64" height="64"><span>karolsolveskassil<span class="dot">.</span>ca</span></p>
-      <p class="update-note"><strong>Last updated · Oct 25, 2026 at 6:57 PM EDT</strong></p>
+      <p class="update-note"><strong>Last updated · Oct 25, 2026 at 7:22 PM EDT</strong></p>
     </div>
   </header>
 
@@ -1258,8 +1258,7 @@
           </div>
           <h3>${label}</h3>
           <p>${description}</p>
-          ${handwritten && lesson.id === '1-2' ? '<p class="resource-warning">Some practice questions may be missing from the handwritten solutions. You can find them in the digital copy.</p>' : ''}
-          ${handwritten && lesson.id === '1-3b' ? '<p class="resource-warning">Not all practice problems are included in the handwritten solution. You can find the remaining problems in the digital copy.</p>' : ''}
+          ${handwritten ? '<p class="resource-warning">Practice problems and homework may not be included in the handwritten copy. You can find them in the digital copy instead.</p>' : ''}
           <div class="resource-actions" hidden>
             <a class="pdf-link view-link" href="${viewerHref}" target="_blank" rel="noopener">View PDF <span aria-hidden="true">↗</span></a>
             <a class="pdf-link download-link" href="${file}" download>Download PDF</a>
