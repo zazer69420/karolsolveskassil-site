@@ -37,5 +37,18 @@ window.SITE_LESSONS = [
   { id: '2-9b', number: '2.9b', title: 'Problem Solving' },
   { id: '2-10', number: '2.10', title: 'Gravitation and Satellites' },
   { id: '2-11', number: '2.11', title: 'Dark Matter' },
-  { id: '2-12', number: '2.12', title: 'Artificial Gravity' }
+  { id: '2-12', number: '2.12', title: 'Artificial Gravity' },
+  { id: '3-1', number: '3.1', title: 'Work, Kinetic and Gravitational Energy' },
+  { id: '3-3', number: '3.3', title: "Hooke's Law and SHM" },
+  { id: '3-4', number: '3.4', title: 'Conservation of Energy' },
+  { id: '3-5', number: '3.5', title: 'Conservation of Energy II' },
+  { id: '3-5b', number: '3.5b', title: 'Conservation of Energy Problems' },
+  { id: '3-7', number: '3.7', title: 'Momentum and Impulse' },
+  { id: '3-8', number: '3.8', title: 'Conservation of Momentum' },
+  { id: '3-8-problems', number: '3.8', title: 'Linear Momentum Problems' },
+  { id: '3-9', number: '3.9', title: 'Conservation of Momentum in 2D' },
+  { id: '3-10', number: '3.10', title: 'Elastic Collisions' },
+  { id: '3-13', number: '3.13', title: 'Problem Solving with Momentum and Energy' },
+  { id: '3-14', number: '3.14', title: 'Review' },
+  { id: '3-practice', number: '3.P', title: 'Energy and Momentum Practice Problems' }
 ];
